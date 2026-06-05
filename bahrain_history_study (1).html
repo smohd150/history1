@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bahrain History — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --dark: #0d1117;
+  --darker: #080c10;
+  --card: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --green: #3fb950;
+  --red: #f85149;
+  --blue: #58a6ff;
+  --orange: #f0883e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--dark); color:var(--text); font-family:'Source Sans 3',sans-serif; font-size:16px; line-height:1.6; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17,23,0.95); border-bottom:1px solid var(--border); backdrop-filter:blur(8px); }
+.nav-inner { max-width:1200px; margin:0 auto; padding:0 20px; display:flex; align-items:center; gap:8px; overflow-x:auto; height:56px; }
+.nav-logo { font-family:'Playfair Display',serif; color:var(--gold); font-size:18px; white-space:nowrap; margin-right:16px; flex-shrink:0; }
+.nav-btn { background:none; border:1px solid transparent; color:var(--muted); padding:6px 14px; border-radius:20px; cursor:pointer; white-space:nowrap; font-size:13px; font-family:'Source Sans 3',sans-serif; transition:all .2s; flex-shrink:0; }
+.nav-btn:hover, .nav-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+
+/* PAGES */
+.page { display:none; max-width:1100px; margin:0 auto; padding:80px 20px 40px; }
+.page.active { display:block; }
+
+/* HERO */
+.hero { text-align:center; padding:60px 20px; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,6vw,72px); color:var(--gold); line-height:1.1; margin-bottom:16px; }
+.hero p { color:var(--muted); font-size:18px; max-width:600px; margin:0 auto 40px; }
+.hero-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; max-width:900px; margin:0 auto; }
+.hero-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; cursor:pointer; transition:all .2s; text-align:left; }
+.hero-card:hover { border-color:var(--gold); transform:translateY(-2px); }
+.hero-card .num { font-size:28px; font-family:'Playfair Display',serif; color:var(--gold); }
+.hero-card .title { font-size:14px; color:var(--text); margin-top:4px; }
+.hero-card .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* SECTION HEADER */
+.section-header { margin-bottom:32px; }
+.section-header h2 { font-family:'Playfair Display',serif; font-size:36px; color:var(--gold); }
+.section-header p { color:var(--muted); margin-top:6px; }
+
+/* SUMMARY CARD */
+.summary-block { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:20px; }
+.summary-block h3 { color:var(--gold); font-size:18px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.summary-block ul { list-style:none; }
+.summary-block ul li { padding:6px 0; border-bottom:1px solid rgba(48,54,61,0.5); color:var(--text); font-size:15px; }
+.summary-block ul li:last-child { border:none; }
+.summary-block ul li strong { color:var(--gold); }
+.kv-table { width:100%; border-collapse:collapse; }
+.kv-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.kv-table td { padding:8px 12px; font-size:14px; border-bottom:1px solid rgba(48,54,61,0.4); vertical-align:top; }
+.kv-table td:first-child { color:var(--gold); font-weight:600; width:55%; }
+
+/* QUIZ */
+.quiz-container { margin-top:8px; }
+.quiz-q { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; transition:border-color .2s; }
+.quiz-q.correct { border-color:var(--green); }
+.quiz-q.wrong { border-color:var(--red); }
+.quiz-q .q-num { font-size:12px; color:var(--muted); margin-bottom:8px; }
+.quiz-q .q-text { font-size:15px; color:var(--text); margin-bottom:16px; font-weight:600; }
+.quiz-options { display:flex; flex-direction:column; gap:8px; }
+.quiz-opt { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; padding:10px 14px; cursor:pointer; font-size:14px; color:var(--text); transition:all .2s; text-align:left; font-family:'Source Sans 3',sans-serif; }
+.quiz-opt:hover:not(:disabled) { border-color:var(--blue); background:rgba(88,166,255,0.08); }
+.quiz-opt.selected-correct { background:rgba(63,185,80,0.15); border-color:var(--green); color:var(--green); }
+.quiz-opt.selected-wrong { background:rgba(248,81,73,0.15); border-color:var(--red); color:var(--red); }
+.quiz-opt.show-correct { background:rgba(63,185,80,0.08); border-color:var(--green); color:var(--green); }
+.quiz-opt:disabled { cursor:not-allowed; }
+.quiz-input-wrap { display:flex; gap:10px; align-items:center; }
+.quiz-input { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px; padding:10px 14px; color:var(--text); font-size:14px; font-family:'Source Sans 3',sans-serif; flex:1; outline:none; }
+.quiz-input:focus { border-color:var(--blue); }
+.quiz-submit { background:var(--gold); color:#000; border:none; border-radius:8px; padding:10px 20px; cursor:pointer; font-weight:600; font-family:'Source Sans 3',sans-serif; }
+.quiz-feedback { margin-top:12px; padding:10px 14px; border-radius:8px; font-size:14px; display:none; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.correct { background:rgba(63,185,80,0.1); color:var(--green); border:1px solid rgba(63,185,80,0.3); }
+.quiz-feedback.wrong { background:rgba(248,81,73,0.1); color:var(--red); border:1px solid rgba(248,81,73,0.3); }
+.quiz-score { background:var(--card); border:1px solid var(--gold); border-radius:12px; padding:20px; text-align:center; margin-top:20px; display:none; }
+.quiz-score h3 { font-family:'Playfair Display',serif; color:var(--gold); font-size:28px; }
+.quiz-score p { color:var(--muted); margin-top:8px; }
+.quiz-reset { background:var(--gold); color:#000; border:none; border-radius:8px; padding:10px 24px; cursor:pointer; font-weight:600; font-family:'Source Sans 3',sans-serif; margin-top:14px; }
+.matching-grid { display:grid; gap:10px; }
+.match-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:center; }
+.match-label { font-size:14px; color:var(--text); padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:6px; }
+.match-select { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px; padding:8px 12px; color:var(--text); font-size:14px; font-family:'Source Sans 3',sans-serif; outline:none; width:100%; }
+.match-select:focus { border-color:var(--blue); }
+
+/* DATES PAGE */
+.year-group { margin-bottom:28px; }
+.year-badge { display:inline-block; background:var(--gold); color:#000; font-weight:700; font-size:16px; padding:4px 16px; border-radius:20px; margin-bottom:12px; font-family:'Playfair Display',serif; }
+.date-items { background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.date-item { padding:12px 16px; border-bottom:1px solid rgba(48,54,61,0.5); font-size:14px; }
+.date-item:last-child { border:none; }
+.date-item .event { color:var(--text); }
+.date-item .topic { color:var(--muted); font-size:12px; margin-top:2px; }
+
+/* TABS */
+.tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+.tab-btn { background:none; border:1px solid var(--border); color:var(--muted); padding:8px 18px; border-radius:8px; cursor:pointer; font-size:14px; font-family:'Source Sans 3',sans-serif; transition:all .2s; }
+.tab-btn.active { background:var(--gold); color:#000; border-color:var(--gold); font-weight:600; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* BADGES */
+.badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+.badge-green { background:rgba(63,185,80,0.15); color:var(--green); }
+.badge-red { background:rgba(248,81,73,0.15); color:var(--red); }
+.badge-gold { background:rgba(201,168,76,0.15); color:var(--gold); }
+
+/* SCROLL */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:var(--darker); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+@media(max-width:600px) {
+  .match-row { grid-template-columns:1fr; }
+  .hero h1 { font-size:32px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">🇧🇭 Bahrain History</span>
+    <button class="nav-btn active" onclick="showPage('home')">Home</button>
+    <button class="nav-btn" onclick="showPage('lesson1')">Lesson 1</button>
+    <button class="nav-btn" onclick="showPage('topic1')">Topic 1</button>
+    <button class="nav-btn" onclick="showPage('topic2')">Topic 2</button>
+    <button class="nav-btn" onclick="showPage('topic3')">Topic 3</button>
+    <button class="nav-btn" onclick="showPage('topic4')">Topic 4</button>
+    <button class="nav-btn" onclick="showPage('topic5a')">Topic 5A</button>
+    <button class="nav-btn" onclick="showPage('topic5b')">Topic 5B</button>
+    <button class="nav-btn" onclick="showPage('topic5c')">Topic 5C</button>
+    <button class="nav-btn" onclick="showPage('topic6')">Topic 6</button>
+    <button class="nav-btn" onclick="showPage('dates')">📅 All Dates</button>
+    <button class="nav-btn" onclick="showPage('mockexam')">📝 Mock Exam</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>Bahrain History<br>Study Guide</h1>
+    <p>Everything you need for your final exam — summaries, quizzes, dates, and mock exams all in one place.</p>
+    <div class="hero-grid">
+      <div class="hero-card" onclick="showPage('lesson1')"><div class="num">L1</div><div class="title">Historical Chronology</div><div class="sub">BC/AD, Centuries, Millenniums</div></div>
+      <div class="hero-card" onclick="showPage('topic1')"><div class="num">T1</div><div class="title">Introduction to Bahrain</div><div class="sub">Geography, History, Resources</div></div>
+      <div class="hero-card" onclick="showPage('topic2')"><div class="num">T2</div><div class="title">Early Trade in Bahrain</div><div class="sub">Al Khalifa, Exports, Imports</div></div>
+      <div class="hero-card" onclick="showPage('topic3')"><div class="num">T3</div><div class="title">From Pearls to Oil</div><div class="sub">Pearl collapse, Oil discovery</div></div>
+      <div class="hero-card" onclick="showPage('topic4')"><div class="num">T4</div><div class="title">Story of Oil</div><div class="sub">BAPCO, Holmes, Infrastructure</div></div>
+      <div class="hero-card" onclick="showPage('topic5a')"><div class="num">5A</div><div class="title">Modernization — Admin & Education</div><div class="sub">Schools, Government reforms</div></div>
+      <div class="hero-card" onclick="showPage('topic5b')"><div class="num">5B</div><div class="title">Modernization — Infrastructure</div><div class="sub">Hospitals, Roads, Ports</div></div>
+      <div class="hero-card" onclick="showPage('topic5c')"><div class="num">5C</div><div class="title">Modernization — Women & Culture</div><div class="sub">Women's rights, Cultural milestones</div></div>
+      <div class="hero-card" onclick="showPage('topic6')"><div class="num">T6</div><div class="title">Economic Diversification</div><div class="sub">ALBA, ASRY, BAPCO, AISCO</div></div>
+      <div class="hero-card" onclick="showPage('dates')"><div class="num">📅</div><div class="title">All Dates Timeline</div><div class="sub">Every important date in one place</div></div>
+      <div class="hero-card" onclick="showPage('mockexam')"><div class="num">📝</div><div class="title">Mock Exam</div><div class="sub">Full practice exam questions</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 1 -->
+<div id="page-lesson1" class="page">
+  <div class="section-header"><h2>Lesson 1: Historical Chronology</h2><p>BC/AD dating system, centuries, and time divisions</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('l1','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('l1','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="l1-summary" class="tab-content active">
+    <div class="summary-block"><h3>⏰ Time Units</h3><table class="kv-table"><tr><td>Decade</td><td>10 years</td></tr><tr><td>Century</td><td>100 years</td></tr><tr><td>Millennium</td><td>1,000 years</td></tr></table></div>
+    <div class="summary-block"><h3>📅 BC and AD</h3><ul><li><strong>BC / BCE</strong> — Before Jesus' birth. Numbers count <strong>DOWN</strong>. Bigger number = older.</li><li><strong>AD / CE</strong> — After Jesus' birth. Numbers count <strong>UP</strong>. Bigger number = more recent.</li><li><strong>No Year Zero</strong> — Goes directly from 1 BC to AD 1.</li><li><strong>No label?</strong> — Assume it is AD.</li><li><strong>c.</strong> before a date = circa = approximately.</li><li><strong>BP</strong> = Before the Present.</li></ul></div>
+    <div class="summary-block"><h3>🏛️ Century Rule</h3><ul><li>Centuries start at <strong>01</strong> and end at <strong>00</strong>.</li><li>Formula: take first digits of year + 1 = century number.</li><li>Example: 1453 → 14+1 = <strong>15th century</strong></li><li>7th century = <strong>601–700</strong> AD</li><li>20th century = <strong>1901–2000</strong></li><li>We live in the <strong>21st century, 3rd millennium</strong></li></ul></div>
+    <div class="summary-block"><h3>📊 Halves and Quarters</h3><ul><li><strong>Half</strong> = 50 years. 1st half: years 01–50. 2nd half: years 51–100.</li><li><strong>Quarter</strong> = 25 years. 1st: 01–25, 2nd: 26–50, 3rd: 51–75, 4th: 76–100.</li><li>Example 20th century quarters: 1901–25, 1926–50, 1951–75, 1976–2000.</li></ul></div>
+    <div class="summary-block"><h3>⚠️ Tricky Points</h3><ul><li>Oil discovered 1932 = <strong>2nd quarter</strong> of 20th century (1926–1950) ✅</li><li>Al Khalifa rule 1783 = <strong>2nd half of 18th century</strong> (1751–1800) ✅</li><li>Chronology = correct order of events and time in history.</li></ul></div>
+  </div>
+  <div id="l1-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-l1"></div>
+  </div>
+</div>
+
+<!-- TOPIC 1 -->
+<div id="page-topic1" class="page">
+  <div class="section-header"><h2>Topic 1: Introduction to Bahrain</h2><p>Geography, natural resources, population, climate, and history</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t1','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t1','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t1-summary" class="tab-content active">
+    <div class="summary-block"><h3>🗺️ Geography</h3><ul><li>Bahrain is an <strong>archipelago</strong> (NOT a single island) in the Arabian Gulf.</li><li>Located <strong>east of Saudi Arabia</strong> and <strong>north of Qatar</strong>.</li><li>More than <strong>84 islands</strong> in <strong>2 main groups</strong>.</li><li>Total land area: <strong>786.5 km²</strong>. Bahrain Island = <strong>80%</strong> of land area.</li><li>Highest point: <strong>Jabal Al-Dukhan — 134 meters</strong>.</li><li>Surface is generally <strong>flat</strong>.</li></ul></div>
+    <div class="summary-block"><h3>🌡️ Climate</h3><table class="kv-table"><tr><td>Summer (June–Sept)</td><td>Very hot & humid. Max 39.7°C in July. Summer Shamal winds.</td></tr><tr><td>Winter (Dec–March)</td><td>Mild 10–20°C. Small irregular rainfall.</td></tr><tr><td>Transition 1 (Oct/Nov)</td><td>Cool air replaces summer conditions.</td></tr><tr><td>Transition 2 — Sarrayat (Apr/May)</td><td>Sudden changes, thunderstorms.</td></tr></table></div>
+    <div class="summary-block"><h3>👥 Population (2021)</h3><table class="kv-table"><tr><td>Total population</td><td><strong>1,504,365</strong></td></tr><tr><td>Bahraini citizens</td><td><strong>47.8%</strong></td></tr><tr><td>Muslims (total population)</td><td><strong>74%</strong></td></tr><tr><td>Muslims (citizens only)</td><td><strong>99.7%</strong></td></tr><tr><td>Expected by 2031</td><td>2 million</td></tr><tr><td>Governorates</td><td>4: Capital (Manama), Muharraq, Northern, Southern</td></tr></table></div>
+    <div class="summary-block"><h3>🏛️ 3 Civilizations</h3><ul><li><strong>Dilmun</strong> — "Land of Immortality / Great Paradise". Political centre from 2050 BC. 3rd millennium BC marketplace. Trading hub connecting Egypt, Iraq, India, Levant.</li><li><strong>Tylos</strong> — Greek name (4th century BC). General <strong>Nearchus</strong> explored it. Greek writer <strong>Pliny</strong> praised its pearls. Influenced by <strong>Hellenistic</strong> culture.</li><li><strong>Awal</strong> — Name before Islam. In 640 AD Prophet Mohammed invited ruler to adopt Islam → peaceful adoption.</li></ul></div>
+    <div class="summary-block"><h3>🇧🇭 Modern Bahrain Key Dates</h3><table class="kv-table"><tr><td>1783</td><td>Al Khalifa family took control (Ahmed Al-Fateh)</td></tr><tr><td>1961 (Dec 16)</td><td>Sheikh Isa bin Salman came to power</td></tr><tr><td>1970</td><td>UN poll — Bahrain confirmed as independent Arab state</td></tr><tr><td>Aug 14, 1971</td><td>Official independence from UK</td></tr><tr><td>1973</td><td>First constitution issued + first parliament</td></tr><tr><td>1999</td><td>King Hamad came to power</td></tr><tr><td>2002</td><td>New constitution (constitutional monarchy)</td></tr></table></div>
+    <div class="summary-block"><h3>🌿 Natural Resources</h3><ul><li><strong>Freshwater</strong> — Underground (Dammam aquifer). Springs dried up in <strong>1980s</strong>.</li><li><strong>Pearls</strong> — Dominated Gulf from 3rd century BC to early 20th century. Collapsed by <strong>1950</strong>.</li><li><strong>Oil & Gas</strong> — Discovered <strong>1932</strong>. Refinery started <strong>1936</strong>. Biggest discovery since 1930s announced in <strong>2018</strong>.</li><li><strong>Agriculture & Fishing</strong> — Dates most important crop.</li></ul></div>
+  </div>
+  <div id="t1-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t1"></div>
+  </div>
+</div>
+
+<!-- TOPIC 2 -->
+<div id="page-topic2" class="page">
+  <div class="section-header"><h2>Topic 2: Early Trade in Bahrain</h2><p>Al Khalifa rule, exports, imports, trade revival</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t2','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t2','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t2-summary" class="tab-content active">
+    <div class="summary-block"><h3>⚡ 3 Factors for Commercial Development</h3><ul><li><strong>1. Geographical Position</strong> — Center of Arabian Gulf. Connecting link between India and Mesopotamia. Modern times: goods from <strong>Europe and India</strong> re-exported to the world.</li><li><strong>2. Commercial Ability of the 'Utub</strong> — Expert traders. Founded <strong>Al-Zubara</strong> — important commercial centre after <strong>middle of 18th century</strong>. Trade relations with Arab coast and India.</li><li><strong>3. Political Stability</strong> — Gulf had instability in first two decades of 19th century (1801–1820). British imposed <strong>agreement of 1820</strong> on Omani coast.</li></ul></div>
+    <div class="summary-block"><h3>📦 Exports 1824</h3><table class="kv-table"><tr><td>Pearls</td><td><strong>~97%</strong> of total exports</td></tr><tr><td>Dates</td><td>0.98%</td></tr><tr><td>Bahraini hemp cloth</td><td>0.97%</td></tr><tr><td>Main destination</td><td><strong>India (47.2%)</strong>, then Persia, Basra, Kuwait, Arabia & Turkey</td></tr></table></div>
+    <div class="summary-block"><h3>📥 Imports 1824</h3><table class="kv-table"><tr><td>India</td><td>~35.21% of imports</td></tr><tr><td>Basra</td><td>~24.77%</td></tr><tr><td>Total annual trade</td><td>~2,456,200 Austrian Riyals</td></tr><tr><td>Exports vs Imports</td><td>67% exports / 33% imports</td></tr></table></div>
+    <div class="summary-block"><h3>📈 Trade Revival Timeline</h3><table class="kv-table"><tr><td>End of 1830s</td><td>Domestic problems → trade DECLINED</td></tr><tr><td>After 1869</td><td>Trade revived (Sheikh Isa bin Ali's reign)</td></tr><tr><td>1905–1906</td><td>Trade flourished — value reached <strong>3 million pounds</strong></td></tr><tr><td>1860</td><td>First customs system established</td></tr><tr><td>1919</td><td>City council founded — supervised customs</td></tr><tr><td>1930</td><td>Customs duty = <strong>97%</strong> of national income</td></tr></table></div>
+    <div class="summary-block"><h3>⚠️ Key Facts</h3><ul><li>Indian currencies = most popular. Pearl divers preferred <strong>Maria Teresa thalers</strong>.</li><li>Indian merchants called <strong>Banyans</strong>.</li><li>Pearl trade collapsed in <strong>1930s</strong> due to: wars, price crashes, cheap cultivated pearls, Wall Street crash, riots.</li><li>Bahrain became main distribution centre for <strong>Arabian Peninsula</strong> in 1920s–1930s.</li><li>Goods changed from Indian to <strong>British products</strong> in first quarter of 20th century.</li></ul></div>
+  </div>
+  <div id="t2-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t2"></div>
+  </div>
+</div>
+
+<!-- TOPIC 3 -->
+<div id="page-topic3" class="page">
+  <div class="section-header"><h2>Topic 3: From Pearls to Oil</h2><p>Local crafts, pearl collapse, oil economy transition</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t3','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t3','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t3-summary" class="tab-content active">
+    <div class="summary-block"><h3>🎣 Local Economic Activities</h3><ul><li>Most important <strong>crop</strong>: <strong>Dates</strong> (ranked 2nd after pearls in exports).</li><li>Most important <strong>income source</strong>: <strong>Pearling</strong>.</li><li>Pearling was <strong>seasonal</strong> (summer only).</li><li>Agriculture problems: most preferred pearling, soil salinity, old farming methods, lack of workers.</li></ul></div>
+    <div class="summary-block"><h3>🏘️ Local Crafts Locations</h3><table class="kv-table"><tr><td>Pottery</td><td>A'ali</td></tr><tr><td>Weaving</td><td>Abu Saiba and Bani Jamra</td></tr><tr><td>Mat weaving</td><td>Sitra</td></tr><tr><td>Basket weaving</td><td>Karbabad</td></tr><tr><td>Boat building</td><td>Noaim</td></tr></table></div>
+    <div class="summary-block"><h3>📉 From Pearl to Oil Economy</h3><table class="kv-table"><tr><td>1925</td><td>Pearl trade started declining</td></tr><tr><td>1929</td><td>Great Depression</td></tr><tr><td>Reasons for decline</td><td>Japanese cultured pearls + Great Depression</td></tr><tr><td>Hardest years</td><td><strong>1932–33 and 1933–34</strong></td></tr><tr><td>Municipal house tax in</td><td><strong>Manama and Muharraq only</strong></td></tr><tr><td>Customs tax</td><td><strong>5%</strong> on imports normally</td></tr></table></div>
+    <div class="summary-block"><h3>🏛️ Government Steps During Crisis</h3><ul><li>Reduced staff + cut government employee pay.</li><li>Customs raised to <strong>10%</strong> on luxury imports.</li><li>Customs raised to <strong>15%</strong> on tobacco and alcoholic drinks.</li><li>Used Reserve Fund.</li><li><strong>General public + Ruling Family + Government employees</strong> all cooperated without opposition.</li></ul></div>
+    <div class="summary-block"><h3>📊 Impact on Society</h3><ul><li><strong>Boat building</strong> = first sector affected.</li><li>Divers' salaries collapsed sharply.</li><li>Boats & divers collapsed by <strong>50%</strong> compared to before Great Depression.</li><li>Pearl value collapsed by more than <strong>70%</strong>.</li><li>Result: unemployment, poverty, <strong>security and social disturbances</strong>.</li><li>Oil revenues grew dramatically from <strong>1935–36 (3rd year)</strong>.</li></ul></div>
+  </div>
+  <div id="t3-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t3"></div>
+  </div>
+</div>
+
+<!-- TOPIC 4 -->
+<div id="page-topic4" class="page">
+  <div class="section-header"><h2>Topic 4: Story of Oil</h2><p>Evidence of oil, Frank Holmes, BAPCO, infrastructure steps</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t4','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t4','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t4-summary" class="tab-content active">
+    <div class="summary-block"><h3>🛢️ Evidence of Oil</h3><ul><li>Bahrain = <strong>first country in region</strong> to discover crude oil in <strong>1932</strong>.</li><li>Discovery was NOT sudden — <strong>preceded by great efforts</strong>.</li><li>Water well in south Bahrain: <strong>Ain Al-Gar</strong> (means "spring of bitumen").</li><li>Bitumen used for <strong>waterproofing</strong> throughout history.</li><li>Bitumen-coated jars found in <strong>Dilmun</strong> era sites.</li><li>Question was not IF oil existed, but if it was in <strong>commercial quantities</strong>.</li></ul></div>
+    <div class="summary-block"><h3>👤 Frank Holmes & Company Chain</h3><table class="kv-table"><tr><td>Frank Holmes</td><td>"Father of Oil" in Bahrain and Gulf. Sent by Eastern General Syndicate.</td></tr><tr><td>Eastern General Syndicate</td><td>Got concession but didn't want to work</td></tr><tr><td>Eastern Gulf Oil Company</td><td>Bought concession but sold it</td></tr><tr><td>SOCAL (Standard Oil of California)</td><td>Accepted → created BAPCO</td></tr><tr><td>BAPCO</td><td>Registered in <strong>Canada</strong> as subsidiary of SOCAL</td></tr><tr><td>1930</td><td>BAPCO began exploration</td></tr><tr><td>June 1932</td><td>Oil discovered — well No.1</td></tr><tr><td>December 1932</td><td>Oil discovered — well No.2</td></tr></table></div>
+    <div class="summary-block"><h3>🏗️ Steps After Discovery</h3><table class="kv-table"><tr><td>Sitra Terminal</td><td>Eastern shore of Sitra. Work began early 1934. Tanker: <strong>El Segundo</strong>. First export to <strong>Japan — June 7, 1934</strong>.</td></tr><tr><td>Oil Collection Station</td><td>Gasoline produced for machinery at <strong>Sakhir</strong>.</td></tr><tr><td>Refinery Phase 1</td><td><strong>June 1936</strong> — 10,000 barrels/day</td></tr><tr><td>Refinery Phase 2</td><td><strong>End of 1937</strong> — 15,000 barrels/day</td></tr><tr><td>Awali</td><td>First modern town in Bahrain — <strong>1934</strong>. Named by <strong>Sheikh Hamad bin Isa Al Khalifa</strong>. First central air-conditioning.</td></tr><tr><td>Zallaq Pier</td><td>Used <strong>1938–1945</strong> (short period). For Saudi oil to Bahrain refinery.</td></tr><tr><td>Saudi oil discovered</td><td><strong>1938</strong></td></tr><tr><td>Drums & Cans Factory</td><td><strong>August 1944</strong>. With US government. Military purpose. Converted to civilian <strong>1945</strong>.</td></tr><tr><td>Abu Safah Agreement</td><td><strong>February 1958</strong>. Bahrain gets <strong>50%</strong> of production. Oil discovered <strong>1963</strong>. Production <strong>1966</strong>.</td></tr></table></div>
+  </div>
+  <div id="t4-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t4"></div>
+  </div>
+</div>
+
+<!-- TOPIC 5A -->
+<div id="page-topic5a" class="page">
+  <div class="section-header"><h2>Topic 5A: Modernization — Admin & Education</h2><p>Administrative reforms and education milestones</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t5a','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t5a','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t5a-summary" class="tab-content active">
+    <div class="summary-block"><h3>🏛️ Modernization Overview</h3><ul><li>Modernization began during <strong>Sheikh Isa bin Ali</strong> (came to power <strong>1869</strong>).</li><li>Result of cooperation between <strong>government and people</strong>.</li><li><strong>Charles Belgrave</strong> (government advisor) confirmed modernization began <strong>BEFORE</strong> oil discovery.</li><li>After oil discovery in 1932 → modernization progressed <strong>rapidly</strong>.</li></ul></div>
+    <div class="summary-block"><h3>⚖️ Administrative Development</h3><table class="kv-table"><tr><td>1919</td><td>Manama municipality established</td></tr><tr><td>1924</td><td>Municipal Council of Manama = <strong>24 members</strong> — first election in Bahrain (secret ballot)</td></tr><tr><td>1956</td><td>Administrative Council — during <strong>Sheikh Salman bin Hamad's</strong> reign. Headed by <strong>Sheikh Khalifa bin Salman</strong>.</td></tr><tr><td>1971</td><td>Council of Ministers</td></tr><tr><td>1972</td><td>Election of Constituent Assembly</td></tr><tr><td>1973</td><td>Constitution issued + first parliament</td></tr><tr><td>1992</td><td>Shura Council established</td></tr><tr><td>2002</td><td>Amended constitution (King Hamad)</td></tr></table></div>
+    <div class="summary-block"><h3>📚 Education Milestones</h3><table class="kv-table"><tr><td>Before 20th century</td><td>Only Quranic schools (Kuttab)</td></tr><tr><td>1899</td><td><strong>American Mission School</strong> — first modern school in Bahrain (Manama)</td></tr><tr><td>1919</td><td><strong>Al-Hidaya Al-Khalifia School</strong> — first NATIONAL modern school (Muharraq)</td></tr><tr><td>1928</td><td><strong>Khadija Al Kubra School</strong> — first national girls school (Muharraq)</td></tr><tr><td>1928</td><td>First scholarships → <strong>American University of Beirut</strong> — <strong>8 students</strong></td></tr><tr><td>1930</td><td>Schools under direct government control</td></tr><tr><td>1938</td><td>Technical School (Manama)</td></tr><tr><td>1939</td><td>Manama Secondary School</td></tr><tr><td>1956</td><td>Education Council formed</td></tr><tr><td>1966</td><td>Institute of Teachers</td></tr><tr><td>1978</td><td>University College of Sciences, Arts and Education</td></tr><tr><td>1979</td><td>Arabian Gulf University</td></tr><tr><td>1986</td><td>University of Bahrain</td></tr></table></div>
+    <div class="summary-block"><h3>⚠️ Tricky Points</h3><ul><li><strong>University of Bahrain (1986)</strong> was established BEFORE King Hamad's reign (1999).</li><li><strong>Bahrain Polytechnic</strong> was established DURING King Hamad's reign.</li><li>Pearl trade peak = <strong>1905–1906</strong> (early 20th century) ✅</li><li>Administrative Council = during <strong>Sheikh Salman bin Hamad</strong> (not Isa bin Salman!).</li></ul></div>
+  </div>
+  <div id="t5a-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t5a"></div>
+  </div>
+</div>
+
+<!-- TOPIC 5B -->
+<div id="page-topic5b" class="page">
+  <div class="section-header"><h2>Topic 5B: Modernization — Infrastructure</h2><p>Medical services, housing, roads, ports, electricity</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t5b','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t5b','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t5b-summary" class="tab-content active">
+    <div class="summary-block"><h3>🏥 Medical Services</h3><table class="kv-table"><tr><td>1892</td><td>American mission led by <strong>Samuel Zwemer</strong> arrived — modern medical services in rented house</td></tr><tr><td>Jan 1903</td><td>First modern hospital opened — land donated by <strong>Sheikh Isa bin Ali</strong></td></tr><tr><td>1939</td><td>First government hospital (currently <strong>Al-Naim Health Center</strong>)</td></tr><tr><td>Sheikh Salman bin Hamad</td><td>Health services became <strong>completely free</strong></td></tr><tr><td>1959</td><td><strong>Salmaniya Hospital</strong> + nursing school (for women's health)</td></tr><tr><td>1979</td><td>Military Hospital (Sheikh Isa bin Salman's reign)</td></tr><tr><td>1992 (Oct 1)</td><td>MKCC Cardiac Centre opened</td></tr><tr><td>2012</td><td>King Hamad University Hospital (includes oncology)</td></tr><tr><td>2021</td><td>New MKCC building in Awali</td></tr></table></div>
+    <div class="summary-block"><h3>🏘️ Housing</h3><table class="kv-table"><tr><td>1934</td><td>Awali — first modern planned city (for OIL WORKERS, not citizens)</td></tr><tr><td>1962</td><td>Housing and Ownership Department established</td></tr><tr><td>1968</td><td><strong>Isa Town</strong> — first housing city for CITIZENS</td></tr><tr><td>1976</td><td>Ministry of Housing established</td></tr><tr><td>1984</td><td><strong>Hamad Town</strong> — second housing city</td></tr><tr><td>2001</td><td>Zayed City (with UAE cooperation)</td></tr><tr><td>2016</td><td>Khalifa City</td></tr><tr><td>2018</td><td>Salman City</td></tr></table></div>
+    <div class="summary-block"><h3>⚡ Electricity & Water</h3><table class="kv-table"><tr><td>1929</td><td>Power House operational — <strong>2000 lamps and 200 fans</strong></td></tr><tr><td>1931</td><td>Power extended to <strong>Muharraq</strong></td></tr><tr><td>1953</td><td>Mahooz Power Station completed</td></tr><tr><td>1957</td><td>Water supply network — <strong>3000 houses</strong> (2nd part of 20th century!)</td></tr></table></div>
+    <div class="summary-block"><h3>🛣️ Roads & Bridges</h3><table class="kv-table"><tr><td>1926</td><td>First surfaced road — <strong>Jabal Al-Dukhan to Manama</strong> (BEFORE oil discovery!)</td></tr><tr><td>1938</td><td>First petrol filling station</td></tr><tr><td>1941</td><td><strong>Sheikh Hamad Bridge</strong> — linking <strong>Manama and Muharraq</strong></td></tr><tr><td>1976</td><td>Sitra Bridge — linking Manama, Sitra, Nabih Saleh</td></tr><tr><td>1986</td><td><strong>King Fahd Causeway</strong> — Bahrain to Saudi Arabia</td></tr></table></div>
+    <div class="summary-block"><h3>✈️ Airport & 🚢 Ports</h3><table class="kv-table"><tr><td>Early 1930s</td><td>Bahrain Airport started operation</td></tr><tr><td>1932</td><td>First Imperial Airways plane landed (on way to India)</td></tr><tr><td>1971</td><td>Terminal for jumbo jets</td></tr><tr><td>2021</td><td>New terminal operational</td></tr><tr><td>1912</td><td>Mina Manama built</td></tr><tr><td>1967</td><td>Mina Salman (deep-water harbor)</td></tr><tr><td>2009</td><td><strong>Khalifa bin Salman Port</strong> — main port today</td></tr></table></div>
+    <div class="summary-block"><h3>📮 Telephone & Post</h3><table class="kv-table"><tr><td>1884</td><td>First post office in Manama — under <strong>India Post</strong> management</td></tr><tr><td>1932</td><td>Telephone service — <strong>12 lines and 1 public telephone</strong></td></tr></table></div>
+  </div>
+  <div id="t5b-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t5b"></div>
+  </div>
+</div>
+
+<!-- TOPIC 5C -->
+<div id="page-topic5c" class="page">
+  <div class="section-header"><h2>Topic 5C: Modernization — Women & Culture</h2><p>Women's development and cultural milestones</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t5c','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t5c','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t5c-summary" class="tab-content active">
+    <div class="summary-block"><h3>👩 Women's Development</h3><table class="kv-table"><tr><td>1928</td><td>First girls school → beginning of women's development</td></tr><tr><td>1950</td><td>Women participated in <strong>municipal elections</strong></td></tr><tr><td>1955</td><td><strong>Bahrain Young Ladies Association</strong> — first women's society in Bahrain AND Arabian Gulf</td></tr><tr><td>1959</td><td>School of Nursing opened</td></tr><tr><td>2002</td><td>Constitution approved women's political rights (nomination and vote)</td></tr><tr><td>Dec 1</td><td>Bahraini Women's Day</td></tr></table></div>
+    <div class="summary-block"><h3>👑 First Women in Leadership</h3><table class="kv-table"><tr><td>First female Ambassador</td><td><strong>Sheikha Haya bint Rashid Al Khalifa</strong> — France — <strong>1999</strong></td></tr><tr><td>First female Minister</td><td><strong>Nada Haffadh</strong> — Ministry of Health — <strong>2004</strong></td></tr><tr><td>First female Judge</td><td><strong>Mona Al-Kuwari</strong> — <strong>2006</strong></td></tr><tr><td>First female MP</td><td><strong>Latifa Al-Quoud</strong> — <strong>2006</strong></td></tr><tr><td>First female Speaker</td><td><strong>Fawzia Zainal</strong> — <strong>2018</strong></td></tr><tr><td>UN General Assembly</td><td>Sheikha Haya chaired — <strong>2006</strong></td></tr></table></div>
+    <div class="summary-block"><h3>📺 Cultural Development — Before Oil</h3><table class="kv-table"><tr><td>1913</td><td>Iqbal Awal Club (with library) + Islamic Club + First printing press</td></tr><tr><td>Early 1920s</td><td>Literary Club — headed by <strong>Sheikh Mohammed bin Abdullah Al Khalifa</strong></td></tr><tr><td>1925</td><td>First play — Al-Hidaya School Theater</td></tr></table></div>
+    <div class="summary-block"><h3>📺 Cultural Development — After Oil (1932)</h3><table class="kv-table"><tr><td>1938</td><td>First cinema — <strong>Abdullah Al-Zayed</strong>, Manama</td></tr><tr><td>1939</td><td>First Bahraini newspaper — <strong>Al-Bahrain</strong> by <strong>Abdullah Al-Zayed</strong></td></tr><tr><td>1940</td><td>Bahrain Radio started → closed 1945 → reopened <strong>1955</strong></td></tr><tr><td>1946</td><td>First public library</td></tr><tr><td>1953</td><td>Danish expedition — <strong>Barbar + Qal'at Al-Bahrain</strong> = confirmed link to <strong>Dilmun</strong></td></tr><tr><td>1956</td><td>Publications Law issued</td></tr></table></div>
+    <div class="summary-block"><h3>📺 Cultural Development — After Independence (1971)</h3><table class="kv-table"><tr><td>1972</td><td>Bahrain Annual Fine Arts Exhibition</td></tr><tr><td>1973</td><td>First TV — <strong>RTV (private)</strong> → became official Bahrain TV in <strong>1975</strong>. During <strong>Sheikh Isa bin Salman's</strong> reign.</td></tr><tr><td>1978</td><td>Historical Documents Centre + Book Fair</td></tr><tr><td>1988</td><td>Bahrain National Museum opened</td></tr><tr><td>1990</td><td>Beit Al Quran opened</td></tr><tr><td>1992</td><td>Bahrain Heritage Festival launched</td></tr></table></div>
+    <div class="summary-block"><h3>🏆 UNESCO & King Hamad Era</h3><table class="kv-table"><tr><td>2005</td><td><strong>Qal'at Al-Bahrain</strong> → UNESCO World Heritage List</td></tr><tr><td>2006</td><td>Spring of Culture Festival launched</td></tr><tr><td>2008</td><td>Isa Cultural Centre</td></tr><tr><td>2009</td><td>Bahrain Summer Festival</td></tr><tr><td>2012</td><td>Bahrain National Theater + <strong>Pearling Path</strong> → UNESCO</td></tr><tr><td>2019</td><td><strong>Dilmun Burial Mounds</strong> → UNESCO + Date palm traditions → UNESCO Intangible Heritage</td></tr></table></div>
+  </div>
+  <div id="t5c-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t5c"></div>
+  </div>
+</div>
+
+<!-- TOPIC 6 -->
+<div id="page-topic6" class="page">
+  <div class="section-header"><h2>Topic 6: Economic Diversification</h2><p>ALBA, ASRY, AISCO, BAPCO, Light Industries</p></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('t6','summary')">📚 Summary</button>
+    <button class="tab-btn" onclick="switchTab('t6','quiz')">✅ Practice Quiz</button>
+  </div>
+  <div id="t6-summary" class="tab-content active">
+    <div class="summary-block"><h3>🌐 Why Diversification?</h3><ul><li>Bahrain's oil reserves are <strong>LIMITED</strong> compared to other Gulf States.</li><li>Onshore field: <strong>Jabal Al-Dukhan</strong> — production declining.</li><li>Offshore field: <strong>Abu Safah</strong> — shared with Saudi Arabia.</li><li>1975 decision: set up <strong>offshore banking sector</strong>.</li><li>Oil & gas = <strong>two thirds</strong> of government revenues but only <strong>20-25%</strong> of GDP.</li></ul></div>
+    <div class="summary-block"><h3>🔩 ALBA — Aluminium Bahrain</h3><table class="kv-table"><tr><td>Role</td><td><strong>FIRST major industry</strong> in Bahrain</td></tr><tr><td>Established</td><td><strong>1968</strong></td></tr><tr><td>Founded by</td><td><strong>6 international companies</strong> + Bahrain government</td></tr><tr><td>Government share</td><td><strong>19%</strong> originally</td></tr><tr><td>3 Advantages</td><td>1. Cheap natural gas. 2. Low labor costs. 3. Favorable investment climate.</td></tr><tr><td>1979</td><td>Sold <strong>20%</strong> of equity to <strong>SABIC</strong></td></tr></table></div>
+    <div class="summary-block"><h3>🚢 ASRY — Arab Shipbuilding and Repair Yard</h3><table class="kv-table"><tr><td>Role</td><td><strong>SECOND major industry</strong></td></tr><tr><td>Started operation</td><td><strong>November 1977</strong></td></tr><tr><td>Ownership</td><td><strong>5 OAPEC countries</strong> — each owns <strong>18.84%</strong></td></tr><tr><td>1979–1981</td><td>Average <strong>110 vessels/year</strong></td></tr><tr><td>Mid 1980s</td><td>Average dropped to <strong>54 vessels/year</strong></td></tr><tr><td>Goal</td><td>Strategic development, NOT commercial profit. "Arabizing" workforce.</td></tr></table></div>
+    <div class="summary-block"><h3>⚙️ AISCO — Arab Iron and Steel Company</h3><table class="kv-table"><tr><td>Started production</td><td>Early 1985</td></tr><tr><td>Closed</td><td>3 months later (not enough orders)</td></tr><tr><td>Capacity</td><td>4 million tons/year (couldn't reach half)</td></tr><tr><td>Liquidation</td><td>Accumulated <strong>$200 million</strong> in debts</td></tr><tr><td>GIIC</td><td>Subsidiary of <strong>Kuwait Petroleum Company</strong> — purchased assets</td></tr><tr><td>Restarted</td><td><strong>June 1988</strong></td></tr></table></div>
+    <div class="summary-block"><h3>🛢️ BAPCO — Refining</h3><table class="kv-table"><tr><td>Founded</td><td><strong>1929</strong> by Standard Oil of California (SOCAL)</td></tr><tr><td>Oil discovered</td><td>1932</td></tr><tr><td>Started exporting</td><td>1934</td></tr><tr><td>Started refining</td><td>1936</td></tr><tr><td>Refinery capacity</td><td>260,000 barrels/day</td></tr><tr><td>Storage</td><td>14 million barrels</td></tr><tr><td>Crude from Bahrain</td><td>1/6 (rest from Saudi Arabia through pipelines)</td></tr><tr><td>Exports</td><td><strong>95%</strong> of refined products</td></tr><tr><td>Main customers</td><td>Middle East, India, Far East, South East Asia, Africa</td></tr></table></div>
+    <div class="summary-block"><h3>🏭 Light Industries</h3><ul><li>Include: aluminum products, concrete blocks, paints, mattresses, air conditioning, dairy, furniture, plastic bags, fiberglass.</li><li><strong>2 reasons they struggle:</strong></li><li>1. Lack of confidence + lack of marketing skills.</li><li>2. Difficulty raising long-term financial backing.</li></ul></div>
+  </div>
+  <div id="t6-quiz" class="tab-content">
+    <div class="quiz-container" id="quiz-t6"></div>
+  </div>
+</div>
+
+<!-- DATES PAGE -->
+<div id="page-dates" class="page">
+  <div class="section-header"><h2>📅 All Important Dates</h2><p>Every date organized chronologically — multiple events on the same year are grouped together</p></div>
+  <div id="dates-container"></div>
+</div>
+
+<!-- MOCK EXAM -->
+<div id="page-mockexam" class="page">
+  <div class="section-header"><h2>📝 Mock Exam</h2><p>Combined unique questions from all 3 mock exams</p></div>
+  <div class="quiz-container" id="quiz-mock"></div>
+</div>
+
+<script>
+// ==================== NAVIGATION ====================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function switchTab(prefix, tab) {
+  document.querySelectorAll('#page-'+prefix+' .tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#page-'+prefix+' .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(prefix+'-'+tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ==================== QUIZ ENGINE ====================
+function buildQuiz(containerId, questions) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let score = 0;
+  let answered = 0;
+  const total = questions.length;
+
+  questions.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-q';
+    div.id = containerId+'-q'+qi;
+
+    let optionsHTML = '';
+    if (q.type === 'tf') {
+      optionsHTML = `<div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQ('${containerId}',${qi},'True','${q.answer}')">True</button>
+        <button class="quiz-opt" onclick="answerQ('${containerId}',${qi},'False','${q.answer}')">False</button>
+      </div>`;
+    } else if (q.type === 'mc') {
+      optionsHTML = `<div class="quiz-options">` +
+        q.options.map((o,oi) => `<button class="quiz-opt" onclick="answerQ('${containerId}',${qi},'${o.replace(/'/g,"\\'")}','${q.answer.replace(/'/g,"\\'")}')"><strong>${String.fromCharCode(65+oi)}.</strong> ${o}</button>`).join('') +
+        `</div>`;
+    } else if (q.type === 'input') {
+      optionsHTML = `<div class="quiz-input-wrap">
+        <input class="quiz-input" id="${containerId}-input-${qi}" placeholder="Type your answer..." onkeydown="if(event.key==='Enter')checkInput('${containerId}',${qi},'${q.answer.replace(/'/g,"\\'")}')">
+        <button class="quiz-submit" onclick="checkInput('${containerId}',${qi},'${q.answer.replace(/'/g,"\\'")}')">Check</button>
+      </div>`;
+    } else if (q.type === 'match') {
+      const shuffled = [...q.pairs.map(p=>p[1])].sort(()=>Math.random()-0.5);
+      optionsHTML = `<div class="matching-grid">` +
+        q.pairs.map((p,pi) => `<div class="match-row">
+          <div class="match-label">${p[0]}</div>
+          <select class="match-select" id="${containerId}-match-${qi}-${pi}">
+            <option value="">Choose...</option>
+            ${shuffled.map(s=>`<option value="${s}">${s}</option>`).join('')}
+          </select>
+        </div>`).join('') +
+        `</div>
+        <button class="quiz-submit" style="margin-top:12px" onclick="checkMatch('${containerId}',${qi})">Check Answers</button>`;
+    }
+
+    div.innerHTML = `<div class="q-num">Question ${qi+1} of ${total}</div>
+      <div class="q-text">${q.question}</div>
+      ${optionsHTML}
+      <div class="quiz-feedback" id="${containerId}-fb-${qi}"></div>`;
+    container.appendChild(div);
+  });
+
+  const scoreDiv = document.createElement('div');
+  scoreDiv.className = 'quiz-score';
+  scoreDiv.id = containerId+'-score';
+  scoreDiv.innerHTML = `<h3 id="${containerId}-score-text"></h3><p id="${containerId}-score-sub"></p>
+    <button class="quiz-reset" onclick="resetQuiz('${containerId}')">🔄 Try Again</button>`;
+  container.appendChild(scoreDiv);
+}
+
+window._quizState = {};
+
+function answerQ(cid, qi, chosen, correct) {
+  const qDiv = document.getElementById(cid+'-q'+qi);
+  const fb = document.getElementById(cid+'-fb-'+qi);
+  const btns = qDiv.querySelectorAll('.quiz-opt');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen.toLowerCase() === correct.toLowerCase();
+  btns.forEach(b => {
+    const bText = b.textContent.trim();
+    if (bText === chosen) b.className = 'quiz-opt ' + (isCorrect ? 'selected-correct' : 'selected-wrong');
+    if (!isCorrect && bText === correct) b.className = 'quiz-opt show-correct';
+  });
+
+  fb.textContent = isCorrect ? '✅ Correct!' : `❌ Incorrect. The correct answer is: ${correct}`;
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+
+  if (!window._quizState[cid]) window._quizState[cid] = {score:0, answered:0};
+  window._quizState[cid].answered++;
+  if (isCorrect) window._quizState[cid].score++;
+  checkQuizComplete(cid);
+}
+
+function checkInput(cid, qi, correct) {
+  const input = document.getElementById(cid+'-input-'+qi);
+  const fb = document.getElementById(cid+'-fb-'+qi);
+  const chosen = input.value.trim().toLowerCase();
+  const isCorrect = chosen === correct.toLowerCase() || chosen.includes(correct.toLowerCase()) || correct.toLowerCase().includes(chosen);
+  input.disabled = true;
+  input.nextElementSibling.disabled = true;
+
+  fb.textContent = isCorrect ? `✅ Correct! Answer: ${correct}` : `❌ Incorrect. Correct answer: ${correct}`;
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+
+  if (!window._quizState[cid]) window._quizState[cid] = {score:0, answered:0};
+  window._quizState[cid].answered++;
+  if (isCorrect) window._quizState[cid].score++;
+  checkQuizComplete(cid);
+}
+
+function checkMatch(cid, qi) {
+  const qDiv = document.getElementById(cid+'-q'+qi);
+  const fb = document.getElementById(cid+'-fb-'+qi);
+  const q = allQuizData[cid][qi];
+  let correct = 0;
+  q.pairs.forEach((p,pi) => {
+    const sel = document.getElementById(`${cid}-match-${qi}-${pi}`);
+    if (sel) { sel.disabled = true; if (sel.value === p[1]) correct++; }
+  });
+  const isCorrect = correct === q.pairs.length;
+  fb.textContent = isCorrect ? `✅ All correct!` : `❌ You got ${correct}/${q.pairs.length} correct. Correct answers: ${q.pairs.map(p=>p[0]+' → '+p[1]).join(', ')}`;
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  qDiv.querySelector('.quiz-submit').disabled = true;
+
+  if (!window._quizState[cid]) window._quizState[cid] = {score:0, answered:0};
+  window._quizState[cid].answered++;
+  if (isCorrect) window._quizState[cid].score++;
+  checkQuizComplete(cid);
+}
+
+function checkQuizComplete(cid) {
+  const total = allQuizData[cid] ? allQuizData[cid].length : 0;
+  const state = window._quizState[cid];
+  if (!state || state.answered < total) return;
+  const scoreDiv = document.getElementById(cid+'-score');
+  if (!scoreDiv) return;
+  const pct = Math.round((state.score/total)*100);
+  document.getElementById(cid+'-score-text').textContent = `${state.score}/${total} — ${pct}%`;
+  document.getElementById(cid+'-score-sub').textContent = pct >= 80 ? '🎉 Excellent! You are ready!' : pct >= 60 ? '👍 Good effort! Review the wrong answers.' : '📚 Keep studying — check the summary tab.';
+  scoreDiv.style.display = 'block';
+}
+
+function resetQuiz(cid) {
+  window._quizState[cid] = {score:0, answered:0};
+  const container = document.getElementById(cid);
+  container.innerHTML = '';
+  document.getElementById(cid+'-score') && (document.getElementById(cid+'-score').style.display='none');
+  buildQuiz(cid, allQuizData[cid]);
+  document.getElementById(cid+'-score').style.display = 'none';
+}
+
+// ==================== QUIZ DATA ====================
+const allQuizData = {};
+
+allQuizData['quiz-l1'] = [
+  {type:'mc', question:'How many years are in a decade?', options:['10','100','1000','50'], answer:'10'},
+  {type:'tf', question:'There is a Year 0 in history.', answer:'False'},
+  {type:'mc', question:'In which years did the 20th century begin and end?', options:['1900-1999','1900-2000','1901-2000','1901-1999'], answer:'1901-2000'},
+  {type:'tf', question:'The rule of the Al Khalifa family began in Bahrain in 1783. This means that it began during the second half of the seventeenth century.', answer:'False'},
+  {type:'tf', question:'Crude oil was discovered in Bahrain during the second quarter of the twentieth century in 1932.', answer:'True'},
+  {type:'mc', question:'In which years did the 7th century begin and end?', options:['700-799','600-699','601-700','600-700'], answer:'601-700'},
+  {type:'mc', question:'A unit of time equal to ten years is called a...', options:['Century','Millennium','Era','Decade'], answer:'Decade'},
+  {type:'mc', question:'The correct order of events and time in History is known as:', options:['Calligraphy','Chronology','Timing','Centuries'], answer:'Chronology'},
+  {type:'match', question:'Match the events with the correct time period:', pairs:[
+    ['The Prophet Muhammad was born in 571','6th Century AD'],
+    ['Ibn Sina (Avicenna) was born in c 980 AD','10th century'],
+    ['The Portuguese invasion of Bahrain was in 1521 AD','16th century'],
+    ['The Dilmun civilization appeared in 2200 BC','Third Millennium BC'],
+    ['The History of Herodotus written around 430 BC','5th century BC'],
+    ['Pythagoras was born in c 570 BC','6th Century BC'],
+  ]},
+];
+
+allQuizData['quiz-t1'] = [
+  {type:'tf', question:'The Kingdom of Bahrain is based on an Island centrally situated in the southern shores of the Arabian Gulf.', answer:'False'},
+  {type:'mc', question:'What is the total land area of Bahrain?', options:['500 km²','786.5 km²','1000 km²','482 km²'], answer:'786.5 km²'},
+  {type:'mc', question:'What is the highest point in Bahrain and how high is it?', options:['Jabal Al-Nour — 200m','Jabal Al-Dukhan — 134m','Jabal Al-Akhdar — 150m','Jabal Al-Dukhan — 100m'], answer:'Jabal Al-Dukhan — 134m'},
+  {type:'tf', question:'Bahrain has roots deep in the past, going back to more than 5000 years.', answer:'True'},
+  {type:'tf', question:"Bahrain's weather is always hot and humid.", answer:'False'},
+  {type:'tf', question:"Bahrain was a vital link between civilizations, such as the Phoenicians in the Mesopotamia, the Nile Valley in Ancient Egypt, and the Indus Valley in Levant.", answer:'False'},
+  {type:'tf', question:"Bahrain's incomes flourished in the early days of Islam, and it provided generous financial support to the Muslim treasury.", answer:'True'},
+  {type:'mc', question:'In which year did Bahrain officially become independent from the United Kingdom?', options:['1973','1783','1971','1961'], answer:'1971'},
+  {type:'mc', question:'What percentage of the total population of Bahrain are Muslims?', options:['99.7%','47.8%','26%','74%'], answer:'74%'},
+  {type:'tf', question:'Males are much more than females in the total population of Bahrain, but the numbers of males and females are balanced for Bahraini citizens.', answer:'True'},
+  {type:'tf', question:'99.7% of the total population of Bahrain are Muslims.', answer:'False'},
+  {type:'mc', question:'Bahrain was called the land of:', options:['Paradise','Kindness','Peace','Immortality'], answer:'Immortality'},
+  {type:'mc', question:'Which civilization was known as the "Land of Immortality"?', options:['Tylos','Awal','Dilmun','Phoenician'], answer:'Dilmun'},
+  {type:'mc', question:'Dilmun laid the foundation for an important marketplace as early as the:', options:['3rd millennium AD','3rd millennium BC','4th millennium BC','2nd millennium BC'], answer:'3rd millennium BC'},
+  {type:'mc', question:'Bahrain was conquered by "Ahmed Al-Fateh" in:', options:['1971','1869','1783','1820'], answer:'1783'},
+  {type:'mc', question:'Shaikh _____ came into power on December 16, 1961.', options:['Salman bin Hamad','Hamad bin Isa','Ahmad Al-Fateh','Isa bin Salman'], answer:'Isa bin Salman'},
+  {type:'input', question:'People of Bahrain voted in the UN poll that Bahrain is an independent Arab state ruled by Al Khalifa in: (answer in numbers)', answer:'1970'},
+];
+
+allQuizData['quiz-t2'] = [
+  {type:'mc', question:'What were the 3 factors that helped Bahrain\'s commercial development after Al Khalifa took control?', options:['Geography, Military Power, Oil','Geography, Commercial Ability of the Utub, Political Stability','Trade Routes, British Support, Pearl Exports','Location, Population, Currency'], answer:'Geography, Commercial Ability of the Utub, Political Stability'},
+  {type:'mc', question:'What percentage of Bahrain\'s total exports were pearls in 1824?', options:['47%','67%','97%','35%'], answer:'97%'},
+  {type:'tf', question:'The annual volume of Bahrain\'s trade during 1824 was mainly from export.', answer:'True'},
+  {type:'tf', question:"Bahrain's trade began a swift incline at the end of the 1830s due to the stability in Bahrain.", answer:'False'},
+  {type:'mc', question:'After which year did Bahrain\'s trade begin to revive?', options:['After 1860','After 1783','After 1869 — Sheikh Isa bin Ali','After 1820'], answer:'After 1869 — Sheikh Isa bin Ali'},
+  {type:'tf', question:"Bahrain's trade flourished in an exceptional manner in 1905-1906 where the value reached more than 10 million pounds.", answer:'False'},
+  {type:'mc', question:'In 1824, the majority of Bahraini commodities were exported to:', options:['Arabian peninsula','Europe','India','Basra'], answer:'India'},
+  {type:'tf', question:'In the two first decades of the 19th century the Gulf region was characterised by its stability until British rule was established.', answer:'False'},
+  {type:'mc', question:'In modern times, Bahrain has become an important centre where goods coming from _____ and India accumulate to be re-exported.', options:['America','Africa','Gulf countries','Europe'], answer:'Europe'},
+  {type:'tf', question:"The geographical position of Bahrain formed a barrier between India and Mesopotamia in the past.", answer:'False'},
+  {type:'mc', question:'When was the first customs system established in Bahrain?', options:['1870','1880','1860','1820'], answer:'1860'},
+  {type:'mc', question:'What percentage of national income was customs duty in 1930?', options:['47%','67%','35%','97%'], answer:'97%'},
+  {type:'mc', question:'When was the city council founded in Bahrain?', options:['1860','1905','1919','1869'], answer:'1919'},
+  {type:'tf', question:'Pearl divers, most of them Arabs, preferred to use Indian currencies during the pearl season.', answer:'False'},
+  {type:'tf', question:'Indian currencies were the only accepted currency in Bahrain in the 19th century.', answer:'False'},
+  {type:'tf', question:'During the twenties and thirties of the 20th century Bahrain became the main centre for the distribution of goods for the Arabian Peninsula.', answer:'True'},
+  {type:'tf', question:'After the middle of the 18th century AlZabara became one of the most important commercial centres in the Gulf.', answer:'True'},
+];
+
+allQuizData['quiz-t3'] = [
+  {type:'mc', question:'What was the main source of income for Bahrain during the first quarter of the 20th century?', options:['Oil','Fishing','Pearling','Agriculture'], answer:'Pearling'},
+  {type:'input', question:"Bahrain's most important crop is: (one word)", answer:'dates'},
+  {type:'match', question:'Match the local craft with the correct village:', pairs:[
+    ['Pottery','A\'ali'],['Boat building','Noaim'],['Baskets weaving','Karbabad'],['Mat weaving','Sitra'],['Weaving','Abu Saiba'],
+  ]},
+  {type:'mc', question:'What were the two main reasons for the decline of the pearl trade?', options:['Oil discovery and British interference','Japanese cultured pearls and the Great Depression','Lack of divers and soil salinity','WWI and price crashes'], answer:'Japanese cultured pearls and the Great Depression'},
+  {type:'mc', question:'What were the hardest years of the economic crisis in Bahrain?', options:['1925-26 and 1926-27','1929-30 and 1930-31','1932-33 and 1933-34','1935-36 and 1936-37'], answer:'1932-33 and 1933-34'},
+  {type:'mc', question:'What was customs duty raised to on tobacco and alcoholic drinks?', options:['5%','10%','20%','15%'], answer:'15%'},
+  {type:'mc', question:'Which sector was the FIRST to be affected by the collapse of the pearl trade?', options:['Agriculture','Fishing','Boat building','Pottery'], answer:'Boat building'},
+  {type:'tf', question:'The value of pearls collapsed by more than 70% compared to before the Great Depression.', answer:'True'},
+  {type:'tf', question:'The numbers of boat diving and divers have lost half their numbers compared to before the Great Depression.', answer:'True'},
+  {type:'tf', question:'The people of Bahrain, government employees, and the ruling family cooperated to overcome the crisis of low incomes in the first half of the 1930s.', answer:'True'},
+  {type:'tf', question:'The collapse of the pearl trade resulted in poverty but without any security and social disturbances.', answer:'False'},
+  {type:'mc', question:'From which year did oil revenues increase dramatically?', options:['First year (1933-34)','Second year (1934-35)','Third year (1935-36)','Fourth year (1936-37)'], answer:'Third year (1935-36)'},
+  {type:'mc', question:'At the beginning of the second quarter of the 20th century, customs tax on imports was 5%, in addition to a small municipal house tax in:', options:['Manama only','Manama, Muharraq and Riffa','Muharraq only','Manama and in Muharraq'], answer:'Manama and in Muharraq'},
+];
+
+allQuizData['quiz-t4'] = [
+  {type:'tf', question:'The discovery of oil was the lifeline for Bahrain\'s economy. This discovery happened suddenly by chance.', answer:'False'},
+  {type:'mc', question:'Who is known as the "Father of Oil" in Bahrain and the Gulf?', options:['Sheikh Hamad bin Isa','Major Frank Holmes','Sheikh Isa bin Ali','Ahmed Al Fateh'], answer:'Major Frank Holmes'},
+  {type:'input', question:'What was the name of the water well in southern Bahrain that showed evidence of oil? (two words)', answer:'Ain Al-Gar'},
+  {type:'mc', question:'In which month and year was oil discovered from well No. 1?', options:['December 1932','June 1930','June 1932','January 1934'], answer:'June 1932'},
+  {type:'mc', question:'BAPCO was established as a subsidiary of:', options:['Eastern General Syndicate','Eastern Gulf Oil Company','Standard Oil of California Company','Standard Oil of New Jersey'], answer:'Standard Oil of California Company'},
+  {type:'mc', question:'When did BAPCO begin exploration work in Bahrain?', options:['1930','1931','1932','1929'], answer:'1930'},
+  {type:'tf', question:'After the flow of oil from well number one, work began on two different paths.', answer:'True'},
+  {type:'mc', question:'The first-ever shipment of Bahraini crude oil on June 7, 1934 was exported to:', options:['USA','India','Saudi Arabia','Japan'], answer:'Japan'},
+  {type:'mc', question:'When was the first phase of the oil refinery opened and what was its capacity?', options:['June 1935 — 15,000 barrels','June 1936 — 10,000 barrels','End 1937 — 10,000 barrels','June 1936 — 15,000 barrels'], answer:'June 1936 — 10,000 barrels'},
+  {type:'mc', question:'What was the first modern town in Bahrain and when was it founded?', options:['Sitra — 1932','Muharraq — 1930','Awali — 1934','Zallaq — 1938'], answer:'Awali — 1934'},
+  {type:'tf', question:'The Zallaq pier was used for a long period.', answer:'False'},
+  {type:'tf', question:'The refinery expansion continued, especially after the discovery of oil in Saudi Arabia in 1940.', answer:'False'},
+  {type:'mc', question:'The drums and cans factory was established in partnership with which country and for what purpose?', options:['UK — commercial','Japan — military','USA — military','Canada — oil production'], answer:'USA — military'},
+  {type:'mc', question:'What percentage of oil production does Bahrain receive from Abu Safah field?', options:['25%','75%','100%','50%'], answer:'50%'},
+  {type:'input', question:'The agreement about Abu Safah field between Bahrain and Saudi Arabia was signed in: (numbers)', answer:'1958'},
+];
+
+allQuizData['quiz-t5a'] = [
+  {type:'mc', question:'Who was the ruler when modernization in Bahrain began, and when?', options:['Sheikh Hamad bin Isa — 1999','Sheikh Isa bin Ali — 1869','Sheikh Salman bin Hamad — 1956','Ahmed Al Fateh — 1783'], answer:'Sheikh Isa bin Ali — 1869'},
+  {type:'tf', question:'Modernization began in Bahrain after the discovery of oil.', answer:'False'},
+  {type:'mc', question:'Who was Bahrain\'s government advisor who confirmed modernization began before oil?', options:['Major Frank Holmes','Sheikh Khalifa bin Salman','Charles Belgrave','Sheikh Abdullah bin Isa'], answer:'Charles Belgrave'},
+  {type:'mc', question:'What was the first modern school in Bahrain and when?', options:['Al-Hidaya Al-Khalifia — 1919','Khadija Al Kubra — 1928','American Mission School — 1899','Technical School — 1938'], answer:'American Mission School — 1899'},
+  {type:'tf', question:'Prior to the 20th century, education was represented in Quranic schools (Kuttab) until the American Mission School in 1899.', answer:'True'},
+  {type:'mc', question:'What was the first NATIONAL modern school in Bahrain?', options:['American Mission School','Khadija Al Kubra School','Al-Hidaya Al-Khalifia School','Technical School'], answer:'Al-Hidaya Al-Khalifia School'},
+  {type:'mc', question:'When was the first national school for girls established?', options:['1899','1919','1928','1930'], answer:'1928'},
+  {type:'mc', question:'The first Bahraini scholarships went to which university and how many students?', options:['University of Bahrain — 10','Arabian Gulf University — 5','American University of Beirut — 8','Cairo University — 12'], answer:'American University of Beirut — 8'},
+  {type:'mc', question:'When did schools come under direct government control?', options:['1919','1928','1930','1932'], answer:'1930'},
+  {type:'mc', question:'When was the first election in Bahrain?', options:['Election of Parliament 1973','Constituent Assembly 1972','Municipal Council of Manama 1924','Shura Council 1992'], answer:'Municipal Council of Manama 1924'},
+  {type:'mc', question:'The Administrative Council was established during the reign of Sheikh:', options:['Isa bin Salman','Hamad bin Isa','Salman bin Hamad','Isa bin Ali'], answer:'Salman bin Hamad'},
+  {type:'mc', question:'When was the Shura Council established?', options:['1973','1986','1971','1992'], answer:'1992'},
+  {type:'mc', question:'When was the University of Bahrain established?', options:['1978','1979','1966','1986'], answer:'1986'},
+  {type:'tf', question:'Bahrain Polytechnic and the University of Bahrain were both established during the reign of HM King Hamad bin Isa Al Khalifa.', answer:'False'},
+  {type:'mc', question:'When was Manama municipality established?', options:['1932','1924','1918','1919'], answer:'1919'},
+];
+
+allQuizData['quiz-t5b'] = [
+  {type:'mc', question:'Who led the American mission that arrived in Bahrain in 1892?', options:['Charles Belgrave','Major Frank Holmes','Samuel Zwemer','Sheikh Isa bin Ali'], answer:'Samuel Zwemer'},
+  {type:'mc', question:'When was the first modern hospital in Bahrain opened and who donated the land?', options:['1892 — Charles Belgrave','Jan 1903 — Sheikh Isa bin Ali','1939 — Sheikh Salman','1903 — Samuel Zwemer'], answer:'Jan 1903 — Sheikh Isa bin Ali'},
+  {type:'tf', question:'In 1939, the first government hospital was opened in Bahrain (currently Al-Naim Health Center).', answer:'True'},
+  {type:'mc', question:'During whose reign did health services become completely free?', options:['Sheikh Isa bin Ali','Sheikh Isa bin Salman','King Hamad bin Isa','Sheikh Salman bin Hamad'], answer:'Sheikh Salman bin Hamad'},
+  {type:'tf', question:'Sheikh Hamad Bridge, the first bridge linking Manama and Sitra, was completed in 1941.', answer:'False'},
+  {type:'mc', question:'What was the first modern planned city in Bahrain, when, and for whom?', options:['Isa Town — 1968 — citizens','Awali — 1934 — oil workers','Hamad Town — 1984 — citizens','Awali — 1934 — citizens'], answer:'Awali — 1934 — oil workers'},
+  {type:'mc', question:'What was Hamad Town and when did it open?', options:['First housing city — 1968','Second housing city — 1984','Third housing city — 2001','Ministry of Housing — 1976'], answer:'Second housing city — 1984'},
+  {type:'mc', question:'What was the first surfaced road in Bahrain and when?', options:['Manama-Muharraq — 1941','Jabal Al-Dukhan to Manama — 1926','Manama-Sitra — 1976','Bahrain-Saudi Arabia — 1986'], answer:'Jabal Al-Dukhan to Manama — 1926'},
+  {type:'tf', question:'The first surfaced road was built in Bahrain before the discovery of oil.', answer:'True'},
+  {type:'mc', question:'When was King Fahd Causeway opened?', options:['1976','1941','1986','1931'], answer:'1986'},
+  {type:'mc', question:'When was Bahrain\'s telephone service started and how many lines?', options:['1884 — 12 lines','1932 — 1 line','1932 — 12 lines and 1 public telephone','1884 — 1 public telephone'], answer:'1932 — 12 lines and 1 public telephone'},
+  {type:'mc', question:'When was the first post office opened and under whose management?', options:['1932 — British Post','1892 — American Mission','1884 — India Post','1903 — Bahrain Government'], answer:'1884 — India Post'},
+  {type:'mc', question:'What is the main port in Bahrain today and when?', options:['Mina Manama — 1912','Mina Salman — 1967','Khalifa bin Salman Port — 2009','Mina Salman — 2009'], answer:'Khalifa bin Salman Port — 2009'},
+  {type:'mc', question:'The Power House in 1929 provided electricity for:', options:['2000 lamps and 100 fans','1000 lamps and 200 fans','2000 lamps and 200 fans','3000 houses'], answer:'2000 lamps and 200 fans'},
+  {type:'tf', question:'The water supply network was instituted during the first part of the 20th century.', answer:'False'},
+];
+
+allQuizData['quiz-t5c'] = [
+  {type:'mc', question:'When did women first participate in municipal elections in Bahrain?', options:['1928','1955','1950','1959'], answer:'1950'},
+  {type:'mc', question:'What was the first women\'s society in Bahrain and when?', options:['School of Nursing — 1959','Bahrain Young Ladies Association — 1955','Bahrain Women\'s Club — 1950','Bahrain Young Ladies Association — 1928'], answer:'Bahrain Young Ladies Association — 1955'},
+  {type:'mc', question:'Who was the first female ambassador in Bahrain, where, and when?', options:['Nada Haffadh — France — 2004','Sheikha Haya bint Rashid Al Khalifa — France — 1999','Mona Al-Kuwari — UN — 2006','Latifa Al-Quoud — France — 1999'], answer:'Sheikha Haya bint Rashid Al Khalifa — France — 1999'},
+  {type:'input', question:'Who was the first female minister in Bahrain in 2004? (two words)', answer:'Nada Haffadh'},
+  {type:'input', question:'What was Mona Al-Kuwari\'s position — the first woman to hold it? (one word)', answer:'judge'},
+  {type:'mc', question:'Who was the first female MP in Bahrain?', options:['Nada Haffadh','Fawzia Zainal','Sheikha Haya','Latifa Al-Quoud'], answer:'Latifa Al-Quoud'},
+  {type:'mc', question:'When was Bahrain Radio started?', options:['1938','1946','1950','1940'], answer:'1940'},
+  {type:'mc', question:'What did the Danish archaeological expedition in 1953 discover?', options:['Oil in Bahrain','Barbar and Qal\'at Al-Bahrain — confirmed link to Dilmun','Pearl beds','Ain Al-Gar'], answer:'Barbar and Qal\'at Al-Bahrain — confirmed link to Dilmun'},
+  {type:'mc', question:'When was the first TV broadcasting in Bahrain and what was the channel?', options:['1975 — Bahrain TV','1973 — RTV private','1972 — Bahrain TV','1973 — Bahrain Formal TV'], answer:'1973 — RTV private'},
+  {type:'mc', question:'Bahrain Television was established during the reign of:', options:['Sheikh Mohammed bin Abdullah Al Khalifa','Sheikh Isa bin Salman Al Khalifa','King Hamad bin Isa Al Khalifa','Sheikh Salman bin Hamad'], answer:'Sheikh Isa bin Salman Al Khalifa'},
+  {type:'tf', question:'Bahrain fort (Qal\'at Al-Bahrain) was registered on UNESCO World Heritage List in 2005.', answer:'True'},
+  {type:'input', question:'A site registered on the UNESCO World Heritage List in 2012 (two words):', answer:'Pearling Path'},
+  {type:'mc', question:'When was the Bahrain National Museum opened?', options:['1990','1978','1992','1988'], answer:'1988'},
+  {type:'mc', question:'When was Beit Al Quran (House of Quran) officially opened?', options:['1988','1992','1990','1978'], answer:'1990'},
+  {type:'mc', question:'He was the Head of the Literary Club:', options:['Sheikh Isa bin Salman','King Hamad','Abdullah Al-Zayed','Sheikh Mohammed bin Abdullah Al Khalifa'], answer:'Sheikh Mohammed bin Abdullah Al Khalifa'},
+  {type:'mc', question:'Who founded the first Bahraini newspaper Al-Bahrain in 1939?', options:['Sheikh Mohammed bin Abdullah Al Khalifa','Samuel Zwemer','Abdullah Al-Zayed','Charles Belgrave'], answer:'Abdullah Al-Zayed'},
+];
+
+allQuizData['quiz-t6'] = [
+  {type:'tf', question:"Bahrain's oil reserves are unlimited by comparison to other Gulf States.", answer:'False'},
+  {type:'mc', question:'When was the decision to set up an offshore banking sector in Bahrain?', options:['1971','1975','1981','1980'], answer:'1975'},
+  {type:'mc', question:'What was the FIRST major industry developed in Bahrain and when?', options:['ASRY — 1977','AISCO — 1985','ALBA — 1968','BAPCO — 1929'], answer:'ALBA — 1968'},
+  {type:'tf', question:'The second major industry to be developed in Bahrain was Aluminum Bahrain (ALBA).', answer:'False'},
+  {type:'mc', question:'ALBA was established by a consortium of how many international companies?', options:['six','seven','five','four'], answer:'six'},
+  {type:'mc', question:'What percentage of ALBA shares did the Bahrain government originally hold?', options:['20%','18.84%','50%','19%'], answer:'19%'},
+  {type:'mc', question:'What are the 3 advantages that attracted aluminum industry to Bahrain?', options:['Oil reserves, low taxes, large population','Cheap natural gas, low labor costs, favorable investment climate','Location, cheap oil, large workforce','Government support, cheap electricity, land area'], answer:'Cheap natural gas, low labor costs, favorable investment climate'},
+  {type:'mc', question:'ASRY — how many OAPEC countries own it and what percentage each?', options:['6 countries — 19% each','4 countries — 25% each','5 countries — 18.84% each','5 countries — 20% each'], answer:'5 countries — 18.84% each'},
+  {type:'mc', question:'When did ASRY begin operation?', options:['1968','1975','November 1977','1979'], answer:'November 1977'},
+  {type:'mc', question:'AISCO was put into liquidation with how much debt?', options:['$100 million','$200 million','$500 million','$50 million'], answer:'$200 million'},
+  {type:'mc', question:'GIIC (which purchased AISCO assets) is a subsidiary of:', options:['SABIC','SOCAL','Kuwait Petroleum Company','OAPEC'], answer:'Kuwait Petroleum Company'},
+  {type:'mc', question:'When was BAPCO founded and by which company?', options:['1932 — Eastern General Syndicate','1929 — Standard Oil of California','1930 — BAPCO itself','1929 — Eastern Gulf Oil Company'], answer:'1929 — Standard Oil of California'},
+  {type:'mc', question:'What percentage of BAPCO\'s refined products are exports?', options:['75%','19%','95%','50%'], answer:'95%'},
+  {type:'tf', question:'Manufacturing and service sector (particularly banking) are expected to play a key role in economic diversification.', answer:'True'},
+  {type:'tf', question:'The oil and gas sectors earn about two thirds of government revenues, but have only a 20-25 percent share of GDP.', answer:'True'},
+  {type:'tf', question:"Bahrain's private sector enterprises are largely involved in the production of beverages, plastics, tiles, concrete blocks, matches among other productions.", answer:'True'},
+];
+
+// MOCK EXAM — Combined unique questions from all 3 mock exams
+allQuizData['quiz-mock'] = [
+  {type:'tf', question:'The era of Sheikh Isa bin Ali was characterized by stability, for this reason, the pearl trade flourished during his reign and reached its peak in the early twentieth century.', answer:'True'},
+  {type:'tf', question:"Bahrain's trade began a swift incline at the end of the 1830s due to the stability in Bahrain.", answer:'False'},
+  {type:'tf', question:"Bahrain's incomes flourished in the early days of Islam, and it provided generous financial support to the Muslim treasury.", answer:'True'},
+  {type:'tf', question:"The majority of Bahrain imports in the early 19th century used to come from India.", answer:'True'},
+  {type:'tf', question:'Bahrain fort registered on the World Heritage List of UNESCO in 2005.', answer:'True'},
+  {type:'tf', question:"Bahrain's private sector enterprises are largely involved in the production of beverages, plastics, tiles, concrete blocks, matches among other productions.", answer:'True'},
+  {type:'mc', question:'The natural resources of Bahrain are:', options:['Oil and Gas only','Agriculture only','Pearl only','All options are correct'], answer:'All options are correct'},
+  {type:'input', question:'Bitumen was used for waterproofing works throughout Bahrain history. Many bitumen-coated jars were discovered back to the era of: (one word)', answer:'Dilmun'},
+  {type:'match', question:'Match the local craft with the correct village:', pairs:[
+    ['Baskets weaving','Karbabad'],['Pottery','A\'ali'],['Mat weaving','Sitra'],['Weaving','Abu Saiba'],['Boat building','Noaim'],
+  ]},
+  {type:'tf', question:'The annual volume of Bahrain\'s trade during 1824 was mainly from export.', answer:'True'},
+  {type:'tf', question:'Sheikh Hamad Bridge, the first bridge linking Manama and Sitra, was completed and officially opened in 1941.', answer:'False'},
+  {type:'tf', question:'The Zallaq pier was used for a long period.', answer:'False'},
+  {type:'tf', question:'In the two first decades of the 19th century the Gulf region was characterised by its stability until British rule was established when the agreement of 1820 was imposed on the Omani coast.', answer:'False'},
+  {type:'tf', question:'The Gulf Industrial Investment Company (GIIC) a subsidiary of the Kuwait Petroleum Company (KPC) purchased AISCO\'s fixed assets and production restarted in June 1988.', answer:'True'},
+  {type:'tf', question:'The hardest years of the crisis in Bahrain were 1931-32 and 1932-33.', answer:'False'},
+  {type:'mc', question:'Officially opened in 1990:', options:['Isa Cultural Centre','Bahrain National Theater','Beit al Quran (House of Quran)','School of Nursing'], answer:'Beit al Quran (House of Quran)'},
+  {type:'mc', question:'Bahrain was declared independent from the United Kingdom on the:', options:['14th of August 1971','16th of December 1971','16th of December 1970','14th of August 1970'], answer:'14th of August 1971'},
+  {type:'tf', question:"The refinery's expansion continued, especially after the discovery of oil in Saudi Arabia in 1940.", answer:'False'},
+  {type:'input', question:"Bahrain's most important crop is: (one word)", answer:'dates'},
+  {type:'tf', question:'As a result of the establishment of the first national school for girls in Bahrain during the second quarter of the 20th century, women began to engage in modern economic and social activities.', answer:'True'},
+  {type:'mc', question:'During the first quarter of the twentieth century, the majority of Bahrainis preferred to work in:', options:['Fishing','Pearling','Local crafts','Agriculture'], answer:'Pearling'},
+  {type:'tf', question:'The second major industry to be developed in Bahrain was Aluminum Bahrain (ALBA).', answer:'False'},
+  {type:'tf', question:"Bahrain's oil reserves are unlimited by comparison to other Gulf States.", answer:'False'},
+  {type:'mc', question:'Bahrain was called the land of:', options:['Paradise','Kindness','Peace','Immortality'], answer:'Immortality'},
+  {type:'tf', question:'The water supply network was instituted to benefit some 3000 houses during the first part of the 20th century.', answer:'False'},
+  {type:'tf', question:'Males are much more than females in the total population of Bahrain, but the numbers of males and females are balanced for Bahraini citizens.', answer:'True'},
+  {type:'mc', question:'The Bahrain Petroleum Company BAPCO was established as a subsidiary of:', options:['Standard Oil of New Jersey','Eastern General Syndicate Company','Standard Oil of California Company','Eastern Gulf Oil Company'], answer:'Standard Oil of California Company'},
+  {type:'tf', question:'After the middle of the 19th century AlZabara became one of the most important commercial centres in the Gulf.', answer:'False'},
+  {type:'tf', question:'Abu Saafah is a production oil field that is shared between Bahrain and Saudi Arabia.', answer:'True'},
+  {type:'tf', question:"A major portion of Bapco's customer base is constituted by the Middle East, India, the Far East, South East Asia and Africa.", answer:'True'},
+  {type:'tf', question:"The Gulf region's commercial activity were not affected by the First World War.", answer:'False'},
+  {type:'mc', question:'The first serious attempts to discover oil in Bahrain began with the efforts of:', options:['Charles Belgrave','Frank Holmes','Sheikh Salman bin Hamad','Sheikh Isa bin Salman'], answer:'Frank Holmes'},
+  {type:'mc', question:'The Administrative Council was established during the reign of Sheikh:', options:['Hamad bin Isa','Isa bin Ali','Isa bin Salman','Salman bin Hamad'], answer:'Salman bin Hamad'},
+  {type:'match', question:'Match the year with the correct event:', pairs:[
+    ['The Military Hospital was established','1979'],
+    ['Formation of the Education Council','1956'],
+    ['The King Fahd Causeway was officially opened','1986'],
+    ['Power Supply extended to Muharraq','1931'],
+    ['New airport terminal became operational','2021'],
+    ['Election of members of the Constituent Assembly','1972'],
+    ['Salman City was opened','2018'],
+    ['The first hospital in Bahrain was opened','1903'],
+  ]},
+  {type:'tf', question:'Modernization began in Bahrain after the discovery of oil.', answer:'False'},
+  {type:'tf', question:'After the flow of oil from well number one, work began on two different paths.', answer:'True'},
+  {type:'tf', question:'Indian currencies were the only accepted currency in Bahrain in the 19th century.', answer:'False'},
+  {type:'tf', question:'During the twenties and thirties of the 20th century Bahrain became the main centre for the distribution of goods for the Arabian Peninsula.', answer:'True'},
+  {type:'tf', question:'The discovery of oil was the lifeline for Bahrain\'s economy. This discovery happened suddenly by chance.', answer:'False'},
+  {type:'tf', question:"At the end of the 1920s, Bahrain's income depended mainly on customs.", answer:'True'},
+  {type:'tf', question:'The geographical position of Bahrain formed a barrier between India and Mesopotamia in the past.', answer:'False'},
+  {type:'mc', question:'Shaikh _____ came into power in December 16, 1961.', options:['Salman bin Hamad','Hamad bin Isa','Ahmad Al-Fateh','Isa bin Salman'], answer:'Isa bin Salman'},
+  {type:'input', question:'People of Bahrain voted in the UN poll that Bahrain is an independent Arab state ruled by Al Khalifa in: (numbers)', answer:'1970'},
+  {type:'mc', question:'Bahrain Radio was started in:', options:['1938','1946','1950','1940'], answer:'1940'},
+  {type:'mc', question:'Hamad Town opened as the second housing city in Bahrain in:', options:['1992','1984','1968','2001'], answer:'1984'},
+  {type:'tf', question:"Bahrain's trade flourished in an exceptional manner in 1905-1906 where the value reached more than 10 million pounds.", answer:'False'},
+  {type:'tf', question:'The first surfaced road was built in Bahrain before the discovery of oil.', answer:'True'},
+  {type:'tf', question:'HM King Hamad bin Isa Al Khalifa came into reign in 1999, and the constitutional monarchy declared in 2002.', answer:'True'},
+  {type:'tf', question:'Manufacturing and service sector (particularly banking) are expected to play a key role in economic diversification.', answer:'True'},
+  {type:'input', question:'The main source of income till end of first quarter of 20th century: (one word)', answer:'Pearls'},
+  {type:'tf', question:'The numbers of boat diving and divers have lost half their numbers compared to the period before the Great Depression.', answer:'True'},
+  {type:'tf', question:'Bahrain Television was established during the reign of Shaikh Isa Bin Salman Al-Khalifa.', answer:'True'},
+  {type:'tf', question:'The oil and gas sectors earn about two thirds of government revenues, but have only a 20-25 percent share of GDP.', answer:'True'},
+  {type:'mc', question:'Manama municipality was established in:', options:['1932','1924','1918','1919'], answer:'1919'},
+  {type:'tf', question:"Bahrain's light industries include aluminum products, concrete blocks, paints, mattresses, air conditioning, dairy and poultry products, furniture, plastic bags, paper manufacture and fiberglass units.", answer:'True'},
+  {type:'input', question:'Mona Al-Kuwari was the first woman to hold what position in Bahrain? (one word)', answer:'judge'},
+  {type:'tf', question:'99.7% of the total population of Bahrain are Muslims.', answer:'False'},
+  {type:'mc', question:'BAPCO began exploration work in Bahrain at the beginning of:', options:['1929','1930','1931','1932'], answer:'1930'},
+  {type:'mc', question:'At the beginning of the second quarter of the 20th century, customs tax on imports was 5%, in addition to a municipal house tax in:', options:['Muharraq','Manama and in Muharraq','Manama','Manama, Muharraq and Riffa'], answer:'Manama and in Muharraq'},
+  {type:'input', question:'A site registered on UNESCO World Heritage List in 2012 (two words):', answer:'Pearling Path'},
+  {type:'input', question:'Bahrain was conquered by "Ahmed Al Fateh" in: (numbers)', answer:'1783'},
+  {type:'tf', question:'The people of Bahrain, government employees, and the ruling family cooperated to overcome the crisis of Bahrain\'s low incomes in the first half of the 1930s.', answer:'True'},
+  {type:'input', question:'Bahrain has the right to 50% of oil production in Abu Safah field based on agreement signed with KSA in: (numbers)', answer:'1958'},
+  {type:'mc', question:'On June 7, 1934, the first-ever shipment of Bahraini crude oil was exported to:', options:['USA','Japan','UK','China'], answer:'Japan'},
+  {type:'tf', question:'The collapse of the pearl trade resulted in poverty but without any security and social disturbances.', answer:'False'},
+];
+
+// ==================== DATES DATA ====================
+const allDates = [
+  {year:'1884', event:'First post office opened in Manama', topic:'Topic 5B'},
+  {year:'1892', event:'American mission led by Samuel Zwemer arrived in Bahrain', topic:'Topic 5B'},
+  {year:'1899', event:'American Mission School — first modern school in Bahrain (Manama)', topic:'Topic 5A'},
+  {year:'1903', event:'First modern hospital opened (January) — land donated by Sheikh Isa bin Ali', topic:'Topic 5B'},
+  {year:'1905-1906', event:'Trade flourished exceptionally — value reached more than 3 million pounds', topic:'Topic 2'},
+  {year:'1912', event:'Mina Manama built with goods warehouse', topic:'Topic 5B'},
+  {year:'1913', event:'Iqbal Awal Club founded (library) + Islamic Club + First printing press', topic:'Topic 5C'},
+  {year:'1919', event:'Manama municipality established + City council founded (supervised customs)', topic:'Topics 2 & 5A'},
+  {year:'Early 1920s', event:'Literary Club founded — headed by Sheikh Mohammed bin Abdullah Al Khalifa', topic:'Topic 5C'},
+  {year:'1924', event:'Municipal Council of Manama — 24 members — FIRST election in Bahrain (secret ballot)', topic:'Topic 5A'},
+  {year:'1925', event:'First play performed at Al-Hidaya School Theater + Pearl trade started declining', topic:'Topics 3 & 5C'},
+  {year:'1926', event:'First surfaced road — Jabal Al-Dukhan to Manama (BEFORE oil discovery)', topic:'Topic 5B'},
+  {year:'1928', event:'Khadija Al Kubra School — first national girls school (Muharraq) + First scholarships to American University of Beirut (8 students)', topic:'Topic 5A'},
+  {year:'1929', event:'Power House operational — 2000 lamps and 200 fans + Great Depression + BAPCO founded by SOCAL', topic:'Topics 5B & 6'},
+  {year:'1930', event:'BAPCO began exploration + Schools under direct government control', topic:'Topics 4 & 5A'},
+  {year:'1931', event:'Power supply extended to Muharraq', topic:'Topic 5B'},
+  {year:'1932', event:'Oil discovered (June — Well No.1, December — Well No.2) + Bahrain Airport started + First Imperial Airways landing + Telephone service (12 lines, 1 public phone)', topic:'Topics 4 & 5B'},
+  {year:'1932-33 & 1933-34', event:'Hardest years of economic crisis — revenue shrunk to less than Rs 7.3 Lakhs', topic:'Topic 3'},
+  {year:'1934', event:'First oil export to Japan (June 7) + Sitra terminal built + Awali founded (first modern town)', topic:'Topic 4'},
+  {year:'1935-36', event:'Oil revenues grew dramatically (3rd year of production)', topic:'Topic 3'},
+  {year:'1936', event:'Refinery Phase 1 opened (June) — 10,000 barrels/day', topic:'Topic 4'},
+  {year:'1937', event:'Refinery Phase 2 opened — 15,000 barrels/day', topic:'Topic 4'},
+  {year:'1938', event:'Saudi Arabia oil discovered + Zallaq pier started + First petrol station + First cinema (Abdullah Al-Zayed) + Technical School (Manama)', topic:'Topics 4, 5A & 5C'},
+  {year:'1939', event:'First Bahraini newspaper Al-Bahrain (Abdullah Al-Zayed) + First government hospital (Al-Naim Health Center) + Manama Secondary School', topic:'Topics 5A, 5B & 5C'},
+  {year:'1940', event:'Bahrain Radio started (closed 1945, reopened 1955)', topic:'Topic 5C'},
+  {year:'1941', event:'Sheikh Hamad Bridge completed — linking Manama and Muharraq', topic:'Topic 5B'},
+  {year:'1944', event:'Drums and Cans Factory (August) — with US government for military purposes', topic:'Topic 4'},
+  {year:'1945', event:'Zallaq pier stopped + Drums factory converted to civilian use', topic:'Topics 4'},
+  {year:'1946', event:'First public library established', topic:'Topic 5C'},
+  {year:'1950', event:'Women participated in municipal elections for the first time', topic:'Topic 5C'},
+  {year:'1953', event:'Danish expedition — Barbar & Qal\'at Al-Bahrain confirmed link to Dilmun + Bahrain History & Archaeology society + Mahooz Power Station', topic:'Topics 5B & 5C'},
+  {year:'1955', event:'Bahrain Radio reopened + Bahrain Young Ladies Association founded', topic:'Topic 5C'},
+  {year:'1956', event:'Administrative Council established (Sheikh Salman bin Hamad) + Education Council formed + Publications Law', topic:'Topics 5A & 5C'},
+  {year:'1957', event:'Water supply network — 3000 houses (2nd part of 20th century)', topic:'Topic 5B'},
+  {year:'1958', event:'Abu Safah agreement — Bahrain gets 50% of production (February)', topic:'Topic 4'},
+  {year:'1959', event:'Salmaniya Hospital + Nursing School established', topic:'Topic 5B'},
+  {year:'1961', event:'Sheikh Isa bin Salman came to power (December 16) + New airport building opened', topic:'Topics 1 & 5B'},
+  {year:'1962', event:'Housing and Ownership Department established', topic:'Topic 5B'},
+  {year:'1963', event:'Oil discovered in Abu Safah field + Offshore Abu Safah field discovered', topic:'Topics 1 & 4'},
+  {year:'1966', event:'Abu Safah production began + Institute of Teachers established', topic:'Topics 4 & 5A'},
+  {year:'1967', event:'Mina Salman (deep-water harbor) came into operation', topic:'Topic 5B'},
+  {year:'1968', event:'ALBA (Aluminium Bahrain) established + Isa Town opened', topic:'Topics 5B & 6'},
+  {year:'1971', event:'Bahrain declared independent from UK (August 14) + Council of Ministers + Airport terminal for jumbo jets', topic:'Topics 1 & 5A & 5B'},
+  {year:'1972', event:'Election of Constituent Assembly + Bahrain Annual Fine Arts Exhibition started', topic:'Topics 5A & 5C'},
+  {year:'1973', event:'Constitution issued + First parliament + First TV broadcasting (RTV private channel)', topic:'Topics 5A & 5C'},
+  {year:'1975', event:'RTV converted to official Bahrain TV + Decision for offshore banking sector', topic:'Topics 5C & 6'},
+  {year:'1976', event:'Ministry of Housing established + Sitra Bridge completed', topic:'Topic 5B'},
+  {year:'1977', event:'ASRY (Arab Shipbuilding and Repair Yard) began operation (November)', topic:'Topic 6'},
+  {year:'1978', event:'University College of Sciences, Arts and Education + Historical Documents Centre + Book Fair', topic:'Topics 5A & 5C'},
+  {year:'1979', event:'Arabian Gulf University + Military Hospital + ALBA sold 20% to SABIC', topic:'Topics 5A, 5B & 6'},
+  {year:'1983', event:'BAPCO founded by SOCAL (note: 1929 BAPCO founded)', topic:'Topic 6'},
+  {year:'1984', event:'Hamad Town opened (second housing city)', topic:'Topic 5B'},
+  {year:'1985', event:'AISCO (Arab Iron and Steel Company) started production', topic:'Topic 6'},
+  {year:'1986', event:'University of Bahrain + King Fahd Causeway opened', topic:'Topics 5A & 5B'},
+  {year:'1988', event:'Bahrain National Museum officially opened + GIIC restarted AISCO (June)', topic:'Topics 5C & 6'},
+  {year:'1990', event:'Beit Al Quran (House of Quran) officially opened', topic:'Topic 5C'},
+  {year:'1992', event:'Shura Council established + MKCC Cardiac Centre opened (Oct 1) + Bahrain Heritage Festival launched', topic:'Topics 5A, 5B & 5C'},
+  {year:'1999', event:'King Hamad came to power + Sheikha Haya became first female ambassador (to France)', topic:'Topics 1 & 5C'},
+  {year:'2001', event:'Zayed City opened (with UAE cooperation)', topic:'Topic 5B'},
+  {year:'2002', event:'Amended constitution issued — constitutional monarchy', topic:'Topics 1 & 5A'},
+  {year:'2004', event:'Nada Haffadh — first female minister (Ministry of Health)', topic:'Topic 5C'},
+  {year:'2005', event:'Qal\'at Al-Bahrain registered on UNESCO World Heritage List', topic:'Topic 5C'},
+  {year:'2006', event:'Spring of Culture Festival + Mona Al-Kuwari first female judge + Latifa Al-Quoud first female MP + Sheikha Haya chaired UN General Assembly', topic:'Topic 5C'},
+  {year:'2008', event:'Isa Cultural Centre established', topic:'Topic 5C'},
+  {year:'2009', event:'Khalifa bin Salman Port came into operation + Bahrain Summer Festival', topic:'Topics 5B & 5C'},
+  {year:'2012', event:'Bahrain National Theater opened + Pearling Path registered on UNESCO', topic:'Topic 5C'},
+  {year:'2016', event:'Khalifa City opened', topic:'Topic 5B'},
+  {year:'2018', event:'Salman City opened + Fawzia Zainal first female speaker + Biggest oil discovery since 1930s announced', topic:'Topics 1, 5B & 5C'},
+  {year:'2019', event:'Dilmun Burial Mounds → UNESCO World Heritage List + Date palm traditions → UNESCO Intangible Cultural Heritage', topic:'Topic 5C'},
+  {year:'2021', event:'New Bahrain airport terminal operational + New MKCC building opened in Awali', topic:'Topics 4 & 5B'},
+];
+
+function buildDatesPage() {
+  const container = document.getElementById('dates-container');
+  allDates.forEach(d => {
+    const group = document.createElement('div');
+    group.className = 'year-group';
+    group.innerHTML = `<div class="year-badge">${d.year}</div>
+      <div class="date-items">
+        <div class="date-item">
+          <div class="event">${d.event}</div>
+          <div class="topic">${d.topic}</div>
+        </div>
+      </div>`;
+    container.appendChild(group);
+  });
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded', () => {
+  Object.keys(allQuizData).forEach(key => buildQuiz(key, allQuizData[key]));
+  buildDatesPage();
+});
+</script>
+</body>
+</html>
