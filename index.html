@@ -108,6 +108,8 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
 .tab-btn.active { background:var(--gold); color:#000; border-color:var(--gold); font-weight:600; }
 .tab-content { display:none; }
 .tab-content.active { display:block; }
+.quiz-open-btn { border-color:var(--green) !important; color:var(--green) !important; }
+.quiz-open-btn:hover { background:rgba(63,185,80,0.1) !important; }
 
 /* BADGES */
 .badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }
@@ -123,6 +125,38 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
 @media(max-width:600px) {
   .match-row { grid-template-columns:1fr; }
   .hero h1 { font-size:32px; }
+}
+
+/* SCROLL TO TOP */
+#scrollTopBtn {
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--gold);
+  color:#000;
+  border:none;
+  border-radius:50px;
+  padding:12px 24px;
+  font-size:15px;
+  font-weight:700;
+  font-family:'Source Sans 3',sans-serif;
+  cursor:pointer;
+  z-index:999;
+  box-shadow:0 4px 20px rgba(201,168,76,0.4);
+  transition:transform .3s ease, opacity .3s ease;
+  opacity:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+#scrollTopBtn.visible {
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+#scrollTopBtn:hover {
+  background:#e0bc5e;
+  box-shadow:0 6px 28px rgba(201,168,76,0.6);
 }
 </style>
 </head>
@@ -172,7 +206,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Lesson 1: Historical Chronology</h2><p>BC/AD dating system, centuries, and time divisions</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('l1','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('l1','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('l1')">✅ Practice Quiz ↗</button>
   </div>
   <div id="l1-summary" class="tab-content active">
     <div class="summary-block"><h3>⏰ Time Units</h3><table class="kv-table"><tr><td>Decade</td><td>10 years</td></tr><tr><td>Century</td><td>100 years</td></tr><tr><td>Millennium</td><td>1,000 years</td></tr></table></div>
@@ -191,7 +225,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 1: Introduction to Bahrain</h2><p>Geography, natural resources, population, climate, and history</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t1','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t1','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t1')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t1-summary" class="tab-content active">
     <div class="summary-block"><h3>🗺️ Geography</h3><ul><li>Bahrain is an <strong>archipelago</strong> (NOT a single island) in the Arabian Gulf.</li><li>Located <strong>east of Saudi Arabia</strong> and <strong>north of Qatar</strong>.</li><li>More than <strong>84 islands</strong> in <strong>2 main groups</strong>.</li><li>Total land area: <strong>786.5 km²</strong>. Bahrain Island = <strong>80%</strong> of land area.</li><li>Highest point: <strong>Jabal Al-Dukhan — 134 meters</strong>.</li><li>Surface is generally <strong>flat</strong>.</li></ul></div>
@@ -211,7 +245,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 2: Early Trade in Bahrain</h2><p>Al Khalifa rule, exports, imports, trade revival</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t2','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t2','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t2')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t2-summary" class="tab-content active">
     <div class="summary-block"><h3>⚡ 3 Factors for Commercial Development</h3><ul><li><strong>1. Geographical Position</strong> — Center of Arabian Gulf. Connecting link between India and Mesopotamia. Modern times: goods from <strong>Europe and India</strong> re-exported to the world.</li><li><strong>2. Commercial Ability of the 'Utub</strong> — Expert traders. Founded <strong>Al-Zubara</strong> — important commercial centre after <strong>middle of 18th century</strong>. Trade relations with Arab coast and India.</li><li><strong>3. Political Stability</strong> — Gulf had instability in first two decades of 19th century (1801–1820). British imposed <strong>agreement of 1820</strong> on Omani coast.</li></ul></div>
@@ -230,7 +264,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 3: From Pearls to Oil</h2><p>Local crafts, pearl collapse, oil economy transition</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t3','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t3','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t3')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t3-summary" class="tab-content active">
     <div class="summary-block"><h3>🎣 Local Economic Activities</h3><ul><li>Most important <strong>crop</strong>: <strong>Dates</strong> (ranked 2nd after pearls in exports).</li><li>Most important <strong>income source</strong>: <strong>Pearling</strong>.</li><li>Pearling was <strong>seasonal</strong> (summer only).</li><li>Agriculture problems: most preferred pearling, soil salinity, old farming methods, lack of workers.</li></ul></div>
@@ -249,7 +283,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 4: Story of Oil</h2><p>Evidence of oil, Frank Holmes, BAPCO, infrastructure steps</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t4','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t4','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t4')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t4-summary" class="tab-content active">
     <div class="summary-block"><h3>🛢️ Evidence of Oil</h3><ul><li>Bahrain = <strong>first country in region</strong> to discover crude oil in <strong>1932</strong>.</li><li>Discovery was NOT sudden — <strong>preceded by great efforts</strong>.</li><li>Water well in south Bahrain: <strong>Ain Al-Gar</strong> (means "spring of bitumen").</li><li>Bitumen used for <strong>waterproofing</strong> throughout history.</li><li>Bitumen-coated jars found in <strong>Dilmun</strong> era sites.</li><li>Question was not IF oil existed, but if it was in <strong>commercial quantities</strong>.</li></ul></div>
@@ -266,7 +300,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 5A: Modernization — Admin & Education</h2><p>Administrative reforms and education milestones</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t5a','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t5a','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t5a')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t5a-summary" class="tab-content active">
     <div class="summary-block"><h3>🏛️ Modernization Overview</h3><ul><li>Modernization began during <strong>Sheikh Isa bin Ali</strong> (came to power <strong>1869</strong>).</li><li>Result of cooperation between <strong>government and people</strong>.</li><li><strong>Charles Belgrave</strong> (government advisor) confirmed modernization began <strong>BEFORE</strong> oil discovery.</li><li>After oil discovery in 1932 → modernization progressed <strong>rapidly</strong>.</li></ul></div>
@@ -284,7 +318,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 5B: Modernization — Infrastructure</h2><p>Medical services, housing, roads, ports, electricity</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t5b','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t5b','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t5b')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t5b-summary" class="tab-content active">
     <div class="summary-block"><h3>🏥 Medical Services</h3><table class="kv-table"><tr><td>1892</td><td>American mission led by <strong>Samuel Zwemer</strong> arrived — modern medical services in rented house</td></tr><tr><td>Jan 1903</td><td>First modern hospital opened — land donated by <strong>Sheikh Isa bin Ali</strong></td></tr><tr><td>1939</td><td>First government hospital (currently <strong>Al-Naim Health Center</strong>)</td></tr><tr><td>Sheikh Salman bin Hamad</td><td>Health services became <strong>completely free</strong></td></tr><tr><td>1959</td><td><strong>Salmaniya Hospital</strong> + nursing school (for women's health)</td></tr><tr><td>1979</td><td>Military Hospital (Sheikh Isa bin Salman's reign)</td></tr><tr><td>1992 (Oct 1)</td><td>MKCC Cardiac Centre opened</td></tr><tr><td>2012</td><td>King Hamad University Hospital (includes oncology)</td></tr><tr><td>2021</td><td>New MKCC building in Awali</td></tr></table></div>
@@ -304,7 +338,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 5C: Modernization — Women & Culture</h2><p>Women's development and cultural milestones</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t5c','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t5c','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t5c')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t5c-summary" class="tab-content active">
     <div class="summary-block"><h3>👩 Women's Development</h3><table class="kv-table"><tr><td>1928</td><td>First girls school → beginning of women's development</td></tr><tr><td>1950</td><td>Women participated in <strong>municipal elections</strong></td></tr><tr><td>1955</td><td><strong>Bahrain Young Ladies Association</strong> — first women's society in Bahrain AND Arabian Gulf</td></tr><tr><td>1959</td><td>School of Nursing opened</td></tr><tr><td>2002</td><td>Constitution approved women's political rights (nomination and vote)</td></tr><tr><td>Dec 1</td><td>Bahraini Women's Day</td></tr></table></div>
@@ -324,7 +358,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="section-header"><h2>Topic 6: Economic Diversification</h2><p>ALBA, ASRY, AISCO, BAPCO, Light Industries</p></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('t6','summary')">📚 Summary</button>
-    <button class="tab-btn" onclick="switchTab('t6','quiz')">✅ Practice Quiz</button>
+    <button class="tab-btn quiz-open-btn" onclick="openQuizTab('t6')">✅ Practice Quiz ↗</button>
   </div>
   <div id="t6-summary" class="tab-content active">
     <div class="summary-block"><h3>🌐 Why Diversification?</h3><ul><li>Bahrain's oil reserves are <strong>LIMITED</strong> compared to other Gulf States.</li><li>Onshore field: <strong>Jabal Al-Dukhan</strong> — production declining.</li><li>Offshore field: <strong>Abu Safah</strong> — shared with Saudi Arabia.</li><li>1975 decision: set up <strong>offshore banking sector</strong>.</li><li>Oil & gas = <strong>two thirds</strong> of government revenues but only <strong>20-25%</strong> of GDP.</li></ul></div>
@@ -351,6 +385,23 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(13,17
   <div class="quiz-container" id="quiz-mock"></div>
 </div>
 
+<!-- SCROLL TO TOP BUTTON -->
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  ↑ Back to Top
+</button>
+
+<script>
+// Scroll to top button visibility
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTopBtn');
+  if (window.scrollY > 300) {
+    btn.classList.add('visible');
+  } else {
+    btn.classList.remove('visible');
+  }
+});
+</script>
+
 <script>
 // ==================== NAVIGATION ====================
 function showPage(id) {
@@ -366,6 +417,166 @@ function switchTab(prefix, tab) {
   document.querySelectorAll('#page-'+prefix+' .tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(prefix+'-'+tab).classList.add('active');
   event.target.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function openQuizTab(prefix) {
+  const quizData = allQuizData['quiz-'+prefix];
+  if (!quizData) return;
+
+  const titles = {
+    'l1': 'Lesson 1: Historical Chronology',
+    't1': 'Topic 1: Introduction to Bahrain',
+    't2': 'Topic 2: Early Trade in Bahrain',
+    't3': 'Topic 3: From Pearls to Oil',
+    't4': 'Topic 4: Story of Oil',
+    't5a': 'Topic 5A: Modernization — Admin & Education',
+    't5b': 'Topic 5B: Modernization — Infrastructure',
+    't5c': 'Topic 5C: Modernization — Women & Culture',
+    't6': 'Topic 6: Economic Diversification',
+  };
+
+  const title = titles[prefix] || 'Practice Quiz';
+
+  // Build a self-contained quiz HTML page
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title} — Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--dark:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#3fb950;--red:#f85149;--blue:#58a6ff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:16px;line-height:1.6;padding:20px;}
+h1{font-family:'Playfair Display',serif;color:var(--gold);font-size:28px;margin-bottom:6px;text-align:center;}
+.subtitle{color:var(--muted);text-align:center;margin-bottom:30px;font-size:14px;}
+.quiz-q{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+.quiz-q.correct{border-color:var(--green);}.quiz-q.wrong{border-color:var(--red);}
+.q-num{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.q-text{font-size:15px;color:var(--text);margin-bottom:16px;font-weight:600;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:14px;color:var(--text);transition:all .2s;text-align:left;font-family:'Source Sans 3',sans-serif;}
+.quiz-opt:hover:not(:disabled){border-color:var(--blue);background:rgba(88,166,255,0.08);}
+.quiz-opt.selected-correct{background:rgba(63,185,80,0.15);border-color:var(--green);color:var(--green);}
+.quiz-opt.selected-wrong{background:rgba(248,81,73,0.15);border-color:var(--red);color:var(--red);}
+.quiz-opt.show-correct{background:rgba(63,185,80,0.08);border-color:var(--green);color:var(--green);}
+.quiz-opt:disabled{cursor:not-allowed;}
+.quiz-input-wrap{display:flex;gap:10px;align-items:center;}
+.quiz-input{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'Source Sans 3',sans-serif;flex:1;outline:none;}
+.quiz-input:focus{border-color:var(--blue);}
+.quiz-submit{background:var(--gold);color:#000;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-weight:600;font-family:'Source Sans 3',sans-serif;}
+.quiz-feedback{margin-top:12px;padding:10px 14px;border-radius:8px;font-size:14px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:rgba(63,185,80,0.1);color:var(--green);border:1px solid rgba(63,185,80,0.3);}
+.quiz-feedback.wrong{background:rgba(248,81,73,0.1);color:var(--red);border:1px solid rgba(248,81,73,0.3);}
+.quiz-score{background:var(--card);border:1px solid var(--gold);border-radius:12px;padding:20px;text-align:center;margin-top:20px;display:none;}
+.quiz-score h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:28px;}
+.quiz-score p{color:var(--muted);margin-top:8px;}
+.quiz-reset{background:var(--gold);color:#000;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-weight:600;font-family:'Source Sans 3',sans-serif;margin-top:14px;}
+.matching-grid{display:grid;gap:10px;}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;}
+.match-label{font-size:14px;color:var(--text);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px;}
+.match-select{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:14px;font-family:'Source Sans 3',sans-serif;outline:none;width:100%;}
+#scrollTopBtn{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--gold);color:#000;border:none;border-radius:50px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;z-index:999;opacity:0;transition:transform .3s,opacity .3s;}
+#scrollTopBtn.visible{transform:translateX(-50%) translateY(0);opacity:1;}
+@media(max-width:600px){.match-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<h1>${title}</h1>
+<div class="subtitle">Answer all questions — click an option to check your answer</div>
+<div id="quiz-container"></div>
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Back to Top</button>
+<script>
+const questions = ${JSON.stringify(quizData)};
+let state = {score:0, answered:0};
+const total = questions.length;
+
+function build() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  state = {score:0, answered:0};
+  questions.forEach((q,qi) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-q';
+    div.id = 'q'+qi;
+    let optHTML = '';
+    if(q.type==='tf'){
+      optHTML = \`<div class="quiz-options">
+        <button class="quiz-opt" onclick="answer(\${qi},'True','\${q.answer}')">True</button>
+        <button class="quiz-opt" onclick="answer(\${qi},'False','\${q.answer}')">False</button>
+      </div>\`;
+    } else if(q.type==='mc'){
+      optHTML = '<div class="quiz-options">'+q.options.map((o,oi)=>\`<button class="quiz-opt" onclick="answer(\${qi},\${JSON.stringify(o)},\${JSON.stringify(q.answer)})"><strong>\${String.fromCharCode(65+oi)}.</strong> \${o}</button>\`).join('')+'</div>';
+    } else if(q.type==='input'){
+      optHTML = \`<div class="quiz-input-wrap"><input class="quiz-input" id="inp\${qi}" placeholder="Type answer..." onkeydown="if(event.key==='Enter')checkInp(\${qi},\${JSON.stringify(q.answer)})"><button class="quiz-submit" onclick="checkInp(\${qi},\${JSON.stringify(q.answer)})">Check</button></div>\`;
+    } else if(q.type==='match'){
+      const shuffled=[...q.pairs.map(p=>p[1])].sort(()=>Math.random()-0.5);
+      optHTML='<div class="matching-grid">'+q.pairs.map((p,pi)=>\`<div class="match-row"><div class="match-label">\${p[0]}</div><select class="match-select" id="m\${qi}_\${pi}"><option value="">Choose...</option>\${shuffled.map(s=>\`<option value="\${s}">\${s}</option>\`).join('')}</select></div>\`).join('')+'</div><button class="quiz-submit" style="margin-top:12px" onclick="checkMatch(\${qi})">Check Answers</button>';
+    }
+    div.innerHTML=\`<div class="q-num">Question \${qi+1} of \${total}</div><div class="q-text">\${q.question}</div>\${optHTML}<div class="quiz-feedback" id="fb\${qi}"></div>\`;
+    container.appendChild(div);
+  });
+  const sc=document.createElement('div');
+  sc.className='quiz-score';sc.id='score';
+  sc.innerHTML='<h3 id="sc-text"></h3><p id="sc-sub"></p><button class="quiz-reset" onclick="build()">🔄 Try Again</button>';
+  container.appendChild(sc);
+}
+
+function done(isCorrect) {
+  state.answered++;
+  if(isCorrect) state.score++;
+  if(state.answered===total){
+    const pct=Math.round((state.score/total)*100);
+    document.getElementById('sc-text').textContent=state.score+'/'+total+' — '+pct+'%';
+    document.getElementById('sc-sub').textContent=pct>=80?'🎉 Excellent! You are ready!':pct>=60?'👍 Good effort! Review wrong answers.':'📚 Keep studying!';
+    document.getElementById('score').style.display='block';
+  }
+}
+
+function answer(qi,chosen,correct){
+  const qDiv=document.getElementById('q'+qi);
+  const fb=document.getElementById('fb'+qi);
+  qDiv.querySelectorAll('.quiz-opt').forEach(b=>{b.disabled=true;const t=b.textContent.trim();if(t===chosen)b.className='quiz-opt '+(chosen.toLowerCase()===correct.toLowerCase()?'selected-correct':'selected-wrong');if(chosen.toLowerCase()!==correct.toLowerCase()&&t===correct)b.className='quiz-opt show-correct';});
+  const ok=chosen.toLowerCase()===correct.toLowerCase();
+  fb.textContent=ok?'✅ Correct!':'❌ Incorrect. Correct answer: '+correct;
+  fb.className='quiz-feedback show '+(ok?'correct':'wrong');
+  done(ok);
+}
+
+function checkInp(qi,correct){
+  const inp=document.getElementById('inp'+qi);
+  const val=inp.value.trim().toLowerCase();
+  const ok=val===correct.toLowerCase()||val.includes(correct.toLowerCase())||correct.toLowerCase().includes(val);
+  inp.disabled=true;inp.nextElementSibling.disabled=true;
+  const fb=document.getElementById('fb'+qi);
+  fb.textContent=ok?'✅ Correct! Answer: '+correct:'❌ Incorrect. Correct answer: '+correct;
+  fb.className='quiz-feedback show '+(ok?'correct':'wrong');
+  done(ok);
+}
+
+function checkMatch(qi){
+  const q=questions[qi];
+  let correct=0;
+  q.pairs.forEach((p,pi)=>{const s=document.getElementById('m'+qi+'_'+pi);if(s){s.disabled=true;if(s.value===p[1])correct++;}});
+  const ok=correct===q.pairs.length;
+  const fb=document.getElementById('fb'+qi);
+  document.querySelector('#q'+qi+' .quiz-submit').disabled=true;
+  fb.textContent=ok?'✅ All correct!':'❌ You got '+correct+'/'+q.pairs.length+' correct. Answers: '+q.pairs.map(p=>p[0]+' → '+p[1]).join(', ');
+  fb.className='quiz-feedback show '+(ok?'correct':'wrong');
+  done(ok);
+}
+
+window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');b.classList.toggle('visible',window.scrollY>300);});
+build();
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([html], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
 }
 
 // ==================== QUIZ ENGINE ====================
